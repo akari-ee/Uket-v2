@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { getToken } from "@uket/util/cookie-client";
 import {
   clearTokenServer,
   getTokenServer,
@@ -59,7 +58,7 @@ instance.interceptors.request.use(async config => {
   } else {
     // Client-side
     if (url && (isStaticUrlMatched(url) || isDynamicUrlMatched(url))) {
-      const accessToken = getToken("user", "access");
+      const accessToken = localStorage.getItem("accessToken");
       if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
     }
   }
