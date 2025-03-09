@@ -30,7 +30,6 @@ export default function GeneralInfo({ userInfo }: GeneralInfoProps) {
   const [errors, setErrors] = useState({ depositorName: "", phoneNumber: "" });
 
   const validateInputs = () => {
-    const errors: { depositorName?: string; phoneNumber?: string } = {};
     if (!depositorNameRegex.test(editedDepositorName)) {
       errors.depositorName = "입금자명은 한글 또는 영문만 가능합니다.";
     }
@@ -38,10 +37,7 @@ export default function GeneralInfo({ userInfo }: GeneralInfoProps) {
       errors.phoneNumber =
         "010-1234-5678 혹은 01012345678 형식으로 입력하세요.";
     }
-    return {
-      depositorName: errors.depositorName || "",
-      phoneNumber: errors.phoneNumber || "",
-    };
+    setErrors(errors);
   };
 
   const handleCancel = () => {
@@ -52,9 +48,8 @@ export default function GeneralInfo({ userInfo }: GeneralInfoProps) {
   };
 
   const handleUpdate = () => {
-    const validationErrors = validateInputs();
-    if (validationErrors) {
-      setErrors(validationErrors);
+    validateInputs();
+    if (errors.depositorName || errors.phoneNumber) {
       return;
     }
 
@@ -77,7 +72,7 @@ export default function GeneralInfo({ userInfo }: GeneralInfoProps) {
   };
 
   return (
-    <main className="flex flex-col gap-2 mt-2">
+    <main className="flex flex-col gap-2 mt-1">
       <main className="flex w-full flex-col gap-2 bg-white px-6 pb-6 pt-4">
         <div className="flex h-8 items-center justify-between">
           <div className="text-lg font-bold text-[#17171B]">일반</div>
