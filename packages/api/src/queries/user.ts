@@ -23,7 +23,7 @@ export const user = createQueryKeys("user", {
       const { data } =
         await fetcher.get<MyTicketListInfoResponse>("/users/tickets");
 
-      return data.items;
+      return data;
     },
   }),
 });
@@ -36,6 +36,9 @@ export const useQueryUserInfo = () => {
   const accessToken = getToken("user", "access");
   const refreshToken = getToken("user", "refresh");
 
+  if (!accessToken || !refreshToken) return { data: null };
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   return useQuery({
     ...user.info(),
     refetchOnMount: true,
@@ -52,7 +55,7 @@ export const useQueryUserTicketList = () => {
   return useSuspenseQuery({
     ...user.ticket(),
     select: data => {
-      return data.map(item => ({
+      return data.items.map(item => ({
         ...item,
         createdAt: formatDate(item.createdAt, "full"),
         showDate: formatDate(item.showDate, "short"),
@@ -68,15 +71,6 @@ export const prefetchUserInfo = () => {
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
     ...user.info(),
-  });
-
-  return dehydrate(queryClient);
-};
-
-export const prefetchUserTicketList = () => {
-  const queryClient = getQueryClient();
-  queryClient.prefetchQuery({
-    ...user.ticket(),
   });
 
   return dehydrate(queryClient);
