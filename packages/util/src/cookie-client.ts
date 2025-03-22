@@ -28,5 +28,3 @@ export const clearToken = (type: UserType, tokenType: TokenType) => {
   const tokenName = getTokenName(type, tokenType);
   deleteCookie(tokenName);
 };
-
-export { setCookie, getCookie, deleteCookie };

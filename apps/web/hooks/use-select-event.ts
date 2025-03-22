@@ -1,26 +1,23 @@
-"use client";
+'use client';
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export const useSelectEvent = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const selectedEventId = searchParams.get("id")
-    ? Number(searchParams.get("id"))
-    : null;
-  const selectedEventName = searchParams.get("event");
+  const [selectedEventId, setSelectedUnivId] = useState<number | null>(null);
+  const [selectedEventName, setSelectedUnivIdName] = useState<string | null>(
+    null,
+  );
 
   const handleSelectEvent = (id: number, name: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("event", name);
-    params.set("id", String(id));
-    router.push(`?${params.toString()}`);
+    setSelectedUnivId(id);
+    setSelectedUnivIdName(name);
   };
 
   const handleNavigate = () => {
-    if (!selectedEventId || !selectedEventName) return;
-    router.push(`/home/${selectedEventName}/${selectedEventId}`);
+    if (!selectedEventId) return;
+    router.push(`/home?select-event=${selectedEventName}&id=${selectedEventId}`);
   };
 
   return {
