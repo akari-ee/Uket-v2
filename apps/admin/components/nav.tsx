@@ -4,13 +4,11 @@ import LogoutModal from "./logout-modal";
 
 interface NavProps {
   isMobileDevice?: boolean;
-  isMobileAuth?: boolean;
   isAuthorized?: boolean;
 }
 
 export default function Nav({
   isMobileDevice = false,
-  isMobileAuth = false,
   isAuthorized = false,
 }: NavProps) {
   return (
@@ -21,10 +19,7 @@ export default function Nav({
       )}
     >
       <nav className="flex items-center justify-between">
-        <AdminLogo
-          isMobileDevice={isMobileDevice}
-          isMobileAuth={isMobileAuth}
-        />
+        <AdminLogo isMobileDevice={isMobileDevice} />
         {isAuthorized && <LogoutModal isMobileDevice={isMobileDevice} />}
       </nav>
     </header>
