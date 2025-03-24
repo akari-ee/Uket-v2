@@ -14,8 +14,9 @@ export const festival = createQueryKeys("festival", {
   list: () => ({
     queryKey: ["festival-list"],
     queryFn: async () => {
-      const { data } =
-        await fetcher.get<FestivalUniversityResponse>(`/universities`);
+      const { data } = await fetcher.get<FestivalUniversityResponse>(
+        `/universities`,
+      );
       return data.items;
     },
   }),
@@ -74,18 +75,13 @@ export const prefetchFestivalList = () => {
   return dehydrate(queryClient);
 };
 
-export const prefetchFestivalDetail = async (id: FestivalUniversity["id"]) => {
+export const prefetchFestivalDetail = (id: FestivalUniversity["id"]) => {
   const queryClient = getQueryClient();
+  queryClient.prefetchQuery({
+    ...festival.detail(id),
+  });
 
-  try {
-    await queryClient.fetchQuery({
-      ...festival.detail(id),
-    });
-
-    return { state: dehydrate(queryClient), error: null };
-  } catch (error) {
-    return { state: dehydrate(queryClient), error };
-  }
+  return dehydrate(queryClient);
 };
 
 export const prefetchFestivalCertification = () => {
