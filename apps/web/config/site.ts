@@ -46,29 +46,35 @@ export const Base_Site_Config: SiteConfig = {
 export const Select_Event_Site_Config: SiteConfig = {
   ...Base_Site_Config,
   title: `${Base_Title} | 둘러보기`,
+  description: "진행 중인 공연을 확인해 보세요!",
   openGraph: {
+    ...Base_OpenGraph,
     title: `${Base_Title} | 둘러보기`,
+    description: "진행 중인 공연을 확인해 보세요!",
     siteName: `${Base_Title} | 둘러보기`,
     url: `${Base_Url}/select-event`,
-    ...Base_OpenGraph,
   },
   twitter: {
-    title: `${Base_Title} | 둘러보기`,
     ...Base_Twitter,
+    title: `${Base_Title} | 둘러보기`,
+    description: "진행 중인 공연을 확인해 보세요!",
   },
 };
 
 export const Auth_Site_Config: SiteConfig = {
   ...Base_Site_Config,
   title: `${Base_Title} | 로그인`,
+  description: "Uket 로그인 및 회원가입",
   openGraph: {
+    ...Base_OpenGraph,
     title: `${Base_Title} | 로그인`,
+    description: "Uket 로그인 및 회원가입",
     siteName: `${Base_Title} | 로그인`,
     url: `${Base_Url}/login`,
-    ...Base_OpenGraph,
   },
   twitter: {
-    title: `${Base_Title} | 로그인`,
     ...Base_Twitter,
+    title: `${Base_Title} | 로그인`,
+    description: "Uket 로그인 및 회원가입",
   },
 };

@@ -1,18 +1,17 @@
-"use client";
+'use client';
 
 import { cn } from "@uket/ui/lib/utils";
 
-import { ChevronLeftIcon } from "@ui/components/ui/icon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { usePreviousPath } from "../hooks/use-previous-path";
+import ProfileErrorFallback from "./error-fallback/profile-error-fallback";
 import LogoIcon from "./logo-icon";
 import Profile from "./profile";
+import RetryApiErrorBoundary from "./retry-api-error-boundary";
 
-// TODO: Profile 컴포넌트 추가 및 Error Boundary 적용
 const PATHS = {
   HOME: new Set(["/", "/home"]),
-  AUTH_RELATED: new Set(["/buy-ticket", "/my-info", "/login", "/signup"]),
+  AUTH_RELATED: new Set(["/buy-ticket", "/my-info", "/signup"]),
   REGISTERED: new Set([
     "/",
     "/home",
@@ -28,43 +27,35 @@ const PATHS = {
 const Nav = () => {
   const pathname = usePathname();
 
-  const [previousPath, popPreviousPath] = usePreviousPath();
-
-  if (!PATHS.REGISTERED.has(pathname) || PATHS.AUTH_RELATED.has(pathname)) {
-    return null;
-  }
-
-  const isHome = PATHS.HOME.has(pathname);
+  const isHome =
+    PATHS.HOME.has(pathname) || /^\/home\/[^/]+\/[^/]+$/.test(pathname);
 
   return (
-    <header
-      className={cn(
-        "left-0 top-0 z-10 container",
-        pathname === "/" ? "absolute" : "bg-white",
-      )}
-    >
-      <nav
+    isHome && (
+      <header
         className={cn(
-          "my-2 flex h-10 w-full items-center justify-between self-stretch",
-          isHome && "container",
+          "left-0 top-0 z-10 container",
+          pathname === "/" ? "absolute" : "bg-white",
         )}
       >
-        {isHome ? (
+        <nav
+          className={cn(
+            "my-2 flex h-10 w-full items-center justify-between self-stretch",
+          )}
+        >
           <>
             <Link href="/">
               <div className="relative">
                 <LogoIcon isRoot={pathname === "/"} />
               </div>
             </Link>
-            <Profile />
+            <RetryApiErrorBoundary fallback={<ProfileErrorFallback />}>
+              <Profile />
+            </RetryApiErrorBoundary>
           </>
-        ) : (
-          <Link href={previousPath} onClick={popPreviousPath}>
-            <ChevronLeftIcon />
-          </Link>
-        )}
-      </nav>
-    </header>
+        </nav>
+      </header>
+    )
   );
 };
 

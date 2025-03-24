@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
+import { getToken } from "@uket/util/cookie-client";
 import {
   clearTokenServer,
   getTokenServer,
   setTokenServer,
 } from "@uket/util/cookie-server";
 import { isDynamicUrlMatched, isStaticUrlMatched } from "@uket/util/path";
+import { redirect } from "next/navigation";
 import { reissue } from "./auth";
 import CustomAxiosError from "./error/default";
 
@@ -58,7 +60,7 @@ instance.interceptors.request.use(async config => {
   } else {
     // Client-side
     if (url && (isStaticUrlMatched(url) || isDynamicUrlMatched(url))) {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = getToken("user", "access");
       if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
     }
   }
@@ -75,12 +77,14 @@ instance.interceptors.response.use(
     const { status } = error.response!;
     const config = error.config as RequestConfig;
 
+    // TODO: production 환경에서 redirect 테스트 필요
     if (
       (status === 404 || status === 403 || status === 400) &&
       config.url === "/auth/reissue"
     ) {
       clearTokenServer("user", "access");
       clearTokenServer("user", "refresh");
+      redirect("/login");
     }
 
     if (
