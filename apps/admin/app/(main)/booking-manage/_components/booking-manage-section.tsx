@@ -48,15 +48,13 @@ export const columns = (pageIndex: number): ColumnDef<Entry>[] => [
       const depositorName = row.original.depositorName;
 
       return (
-        <div className="flex justify-center">
-          <TicketStatusSelector
-            key={ticketId}
-            id={ticketId}
-            status={ticketStatus}
-            userName={depositorName}
-            page={pageIndex}
-          />
-        </div>
+        <TicketStatusSelector
+          key={ticketId}
+          id={ticketId}
+          status={ticketStatus}
+          userName={depositorName}
+          page={pageIndex}
+        />
       );
     },
   },
@@ -103,7 +101,7 @@ export default function BookingManageSection() {
       updateQuery({ page: 1, searchType: type, searchValue: value });
     }
   };
-
+  
   return (
     <main className="flex flex-col gap-3">
       <header className="flex justify-between items-center gap-4">
