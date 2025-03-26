@@ -28,11 +28,11 @@ export type ReservationInfoResponse = {
   reservations: ReservationInfo[];
 };
 
-export type TicketResponse = {
+export interface TicketResponse {
   success: true;
   ticket: {
     userId: number;
     ticketId: number;
     eventId: number;
   };
-};
+}

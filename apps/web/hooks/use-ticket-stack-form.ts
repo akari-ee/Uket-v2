@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@uket/api";
-import { useMutationBuyTicket } from "@uket/api/mutations/use-mutation-buy-ticket";
-import { user } from "@uket/api/queries/user";
-import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
+import { UseFormReturn, useForm } from "react-hook-form";
+import { user } from "@uket/api/queries/user";
+import { useQueryClient } from "@uket/api";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutationBuyTicket } from "@uket/api/mutations/use-mutation-buy-ticket";
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
 export type FormType = UseFormReturn<FormSchemaType, unknown, undefined>;
@@ -15,8 +15,7 @@ export const FormSchema = z.object({
   reservationId: z.number(),
 });
 
-// universityId는 hostId임.
-export const useBuyTicketForm = () => {
+export const useTicketStackForm = () => {
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutationBuyTicket();
 
@@ -41,7 +40,7 @@ export const useBuyTicketForm = () => {
         },
       },
     );
-    return response.ticket.ticketId;
+    return response.ticket;
   };
 
   return { form, onSubmit, isPending };
