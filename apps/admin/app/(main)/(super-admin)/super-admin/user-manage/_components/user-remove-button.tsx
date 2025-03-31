@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@ui/components/ui/button";
 import {
   Dialog,
@@ -9,12 +10,9 @@ import {
   DialogTrigger,
 } from "@ui/components/ui/dialog";
 import { Trash2Icon } from "@ui/components/ui/icon";
-import { useMutationRemoveAdmin } from "@uket/api/mutations/use-mutation-manage-admin";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 interface UserRemoveButtonProps {
-  userId: number;
+  userId: string;
   userName: string;
 }
 
@@ -23,25 +21,8 @@ export default function UserRemoveButton({
   userId,
   userName,
 }: UserRemoveButtonProps) {
-  const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page") as string;
-  const [open, setOpen] = useState(false);
-
-  const { mutate } = useMutationRemoveAdmin(Number(pageParam));
-
-  const handleRemove = () => {
-    mutate(
-      { adminId: userId },
-      {
-        onSuccess: () => {
-          setOpen(false);
-        },
-      },
-    );
-  };
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button size={"icon"} variant={"ghost"}>
           <Trash2Icon className="text-[#5e5e6e]" />
@@ -64,10 +45,7 @@ export default function UserRemoveButton({
               취소
             </Button>
           </DialogClose>
-          <Button
-            className="basis-1/2 bg-error text-xs hover:bg-[#ff5f37]"
-            onClick={handleRemove}
-          >
+          <Button className="basis-1/2 bg-error text-xs hover:bg-[#ff5f37]">
             삭제
           </Button>
         </DialogFooter>
