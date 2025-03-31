@@ -14,19 +14,29 @@ import {
 
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_PAGE_SIZE = 10;
-const DEFAULT_TYPE_VALUE = "NONE";
 
-export const getAdminTicketRequest = (
+const getAdminTicketList = async ({
+  page = DEFAULT_PAGE_NUMBER,
+  size = DEFAULT_PAGE_SIZE,
+}) => {
+  const { data } = await fetcherAdmin.get<TicketListResponse>(
+    `/ticket/search/all`,
+    {
+      mode: "BOUNDARY",
+      params: { page, size },
+    },
+  );
+
+  return data;
+};
+
+export const getAdminSearchRequest = (
   searchType: SearchType,
   value: string,
 ): SearchRequest | null => {
   const searchRequest: SearchRequest = { type: "", value: "" };
 
   switch (searchType) {
-    case "NONE":
-      searchRequest.type = "NONE";
-      break;
-
     case "PHONE_NUMBER":
       searchRequest.type = "phoneNumberLastFourDigits";
       searchRequest.value = value;
@@ -72,20 +82,24 @@ export const getAdminTicketRequest = (
 };
 
 export const adminTicket = createQueryKeys("admin-ticket", {
-  list: ({
-    searchType = DEFAULT_TYPE_VALUE,
-    value = "",
+  list: ({ page, size }) => ({
+    queryKey: ["admin-ticket-list", page],
+    queryFn: () => getAdminTicketList({ page, size }),
+  }),
+  search: ({
+    searchType,
+    value,
     page = DEFAULT_PAGE_NUMBER,
     size = DEFAULT_PAGE_SIZE,
   }: {
-    searchType?: SearchType;
-    value?: string;
+    searchType: SearchType;
+    value: string;
     page?: number;
     size?: number;
   }) => ({
-    queryKey: ["admin-ticket-list", searchType, value, page],
+    queryKey: ["admin-ticket-search", searchType, value, page],
     queryFn: async () => {
-      const searchRequest = getAdminTicketRequest(searchType, value);
+      const searchRequest = getAdminSearchRequest(searchType, value);
 
       if (searchRequest !== null) {
         const { data } = await fetcherAdmin.get<TicketListResponse>(
@@ -110,19 +124,47 @@ export const adminTicket = createQueryKeys("admin-ticket", {
 });
 
 export const useQueryAdminTicketList = ({
-  searchType = DEFAULT_TYPE_VALUE,
-  value = "",
   page = DEFAULT_PAGE_NUMBER,
   size = DEFAULT_PAGE_SIZE,
+  enabled = true,
+}) => {
+  return useQuery({
+    ...adminTicket.list({ page, size }),
+    enabled,
+    select: data => {
+      const timeData = data.content.map(item => {
+        return {
+          ...item,
+          showTime: formatDate(item.showTime, "fullCompact"),
+          updatedDate: formatDate(item.updatedDate, "fullCompact"),
+          orderDate: formatDate(item.orderDate, "fullCompact"),
+        };
+      });
+
+      return {
+        ...data,
+        timezoneData: timeData,
+      };
+    },
+  });
+};
+
+export const useQueryAdminTicketSearch = ({
+  searchType,
+  value,
+  page = DEFAULT_PAGE_NUMBER,
+  size = DEFAULT_PAGE_SIZE,
+  enabled = false,
 }: {
-  searchType?: SearchType;
-  value?: string;
+  searchType: SearchType;
+  value: string;
   page?: number;
   size?: number;
   enabled?: boolean;
 }) => {
   return useQuery({
-    ...adminTicket.list({ searchType, value, page, size }),
+    ...adminTicket.search({ searchType, value, page, size }),
+    enabled,
     select: data => {
       const timeData = data.content.map(item => {
         return {
@@ -144,7 +186,7 @@ export const useQueryAdminTicketList = ({
 export const prefetchAdminTicketList = (page: number) => {
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
-    ...adminTicket.list({ page }),
+    ...adminTicket.list(page),
   });
 
   return dehydrate(queryClient);

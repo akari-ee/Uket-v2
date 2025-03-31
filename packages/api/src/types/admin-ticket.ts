@@ -90,8 +90,7 @@ export type SearchType =
   | "PHONE_NUMBER"
   | "SHOW_DATE"
   | "RESERVATION_USER_TYPE"
-  | "STATUS"
-  | "NONE";
+  | "STATUS";
 
 export interface SearchRequest {
   type: string;
