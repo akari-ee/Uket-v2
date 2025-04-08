@@ -7,7 +7,6 @@ export {
   CircleX,
   DotIcon,
   ExternalLink,
-  FilterIcon,
   LoaderCircle,
   LoaderCircleIcon,
   Moon,
