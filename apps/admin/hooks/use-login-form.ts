@@ -6,10 +6,7 @@ import { z } from "zod";
 
 import { useMutationAdminLogin } from "@uket/api/mutations/use-mutation-admin-login";
 import { AdminLoginResponse } from "@uket/api/types/admin-auth";
-import {
-  setCookieServerForAdmin,
-  setTokenServer,
-} from "@uket/util/cookie-server";
+import { setTokenServer } from "@uket/util/cookie-server";
 import { useRouter } from "next/navigation";
 
 export type FormSchemaType = z.infer<typeof LoginFormSchema>;
@@ -48,9 +45,8 @@ export const useLoginForm = () => {
         password,
       },
       {
-        onSuccess: async ({ accessToken, email }: AdminLoginResponse) => {
+        onSuccess: async ({ accessToken }: AdminLoginResponse) => {
           await setTokenServer("admin", "access", accessToken);
-          await setCookieServerForAdmin("admin-email", email);
           router.push("/qr-scan");
         },
       },
