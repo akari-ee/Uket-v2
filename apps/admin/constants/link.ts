@@ -5,7 +5,7 @@ export interface LinkDetail {
 
 export const NAV_LINK_LIST: LinkDetail[] = [
   {
-    href: "/event-manage",
+    href: "#",
     title: "내 행사 관리",
   },
   {
@@ -24,7 +24,7 @@ export const NAV_LINK_LIST: LinkDetail[] = [
 
 export const MOBILE_NAV_LINK_LIST: LinkDetail[] = [
   {
-    href: "/event-manage",
+    href: "#",
     title: "내 행사 관리",
   },
   {

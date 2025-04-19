@@ -15,8 +15,7 @@ type FormatType =
   | "compact"
   | "fullCompact"
   | "shortCompact"
-  | "fullTimeStamp"
-  | "eventFormDate";
+  | "fullTimeStamp";
 
 const tz = "Asia/Seoul";
 const formatType: Record<FormatType, string> = {
@@ -27,7 +26,6 @@ const formatType: Record<FormatType, string> = {
   compact: "YYYY.MM.DD",
   shortCompact: "YY.MM.DD",
   fullTimeStamp: "YYYY-MM-DDTHH:mm:ss",
-  eventFormDate: "YY/MM/DD HH:mm",
 };
 
 export const formatDate = (date: string, type: FormatType) => {
