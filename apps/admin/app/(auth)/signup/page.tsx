@@ -8,10 +8,8 @@ export default async function Page() {
   return (
     <section
       className={cn(
-        "flex flex-col gap-11 relative py-4 px-4 bg-[#F0EDFD]",
-        "md:my-[-2rem] md:mx-[-3rem] md:px-8",
+        "flex flex-col gap-11 relative my-[-2rem] mx-[-3rem] py-4 px-8 bg-[#F0EDFD]",
         !isMobileDevice && "rounded-xl",
-        isMobileDevice && "w-screen left-1/2 -ml-[50vw]",
       )}
     >
       <SignupAuthSection />

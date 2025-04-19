@@ -3,9 +3,7 @@ export type Content = {
   id: number;
   name: string;
   email: string;
-  password: string;
-  organizationId: number;
-  organizationName: string;
+  organization: string;
   isSuperAdmin: boolean;
 };
 
