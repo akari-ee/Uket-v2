@@ -70,7 +70,8 @@ export interface TicketResponse {
   orderDate: string;
   updatedDate: string;
   ticketStatus: string;
-  friend: string;
+  userType: string;
+  formAnswers: FormAnswer[];
 }
 
 export interface TicketListResponse {
