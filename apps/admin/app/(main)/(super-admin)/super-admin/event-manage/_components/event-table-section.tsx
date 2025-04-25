@@ -92,7 +92,10 @@ export const columns = (
     accessorKey: "eventInfo",
     header: () => <div>행사 정보</div>,
     cell: ({ row }) => {
-      const isEditable = row.original.isModifiable;
+      const registrationStatus = row.original.registrationStatus;
+      const isEditable = ["검수 진행", "검수 완료"].includes(
+        registrationStatus,
+      );
 
       const style = isEditable
         ? "bg-[#F0EDFD] text-brand hover:bg-[#F0EDFD]"

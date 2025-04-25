@@ -1,4 +1,4 @@
-import { useMutationChangeEventStatus } from "@uket/api/mutations/use-mutation-change-event-status";
+// import { useMutationChangeTicketStatus } from "@uket/api/mutations/use-mutation-change-ticket-status";
 import { useMutationChangeTicketStatus } from "@uket/api/mutations/use-mutation-change-ticket-status";
 import { EVENT_STATUS_INFO } from "@uket/api/types/admin-event";
 import { TICKET_STATUS_INFO } from "@uket/api/types/admin-ticket";
@@ -29,7 +29,7 @@ export default function StatusSelector({
 }: TicketStatusSelectorProps) {
   const statusInfo = isTicket ? TICKET_STATUS_INFO : EVENT_STATUS_INFO;
   const ticketMutation = useMutationChangeTicketStatus(page);
-  const eventMutation = useMutationChangeEventStatus(page);
+  const mutation = isTicket ? ticketMutation : null;
 
   const currentItem = statusInfo.find(item => item.text === status)!;
 
@@ -43,23 +43,13 @@ export default function StatusSelector({
   };
 
   const handleConfirmChange = () => {
-    const newValue = statusInfo.find(
+    const newTicketValue = statusInfo.find(
       item => item.text === newStatusText,
     )!.value;
 
-    if (isTicket) {
-      ticketMutation.mutate(
-        { ticketId: id, status: newValue },
-        {
-          onSuccess: () => {
-            setIsOpen(false);
-            setSelectedText(newStatusText);
-          },
-        },
-      );
-    } else {
-      eventMutation.mutate(
-        { uketEventRegistrationId: id, registrationStatus: newValue },
+    if (mutation != null) {
+      mutation.mutate(
+        { ticketId: id, status: newTicketValue },
         {
           onSuccess: () => {
             setIsOpen(false);
@@ -88,7 +78,6 @@ export default function StatusSelector({
         </SelectContent>
       </Select>
       <StatusChangeDialog
-        isTicket={isTicket}
         name={name}
         isOpen={isOpen}
         onOpenDialog={setIsOpen}
