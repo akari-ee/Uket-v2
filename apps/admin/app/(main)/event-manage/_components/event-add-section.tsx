@@ -1,43 +1,18 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 "use client";
 
-import { Form } from "@ui/components/ui/form";
 import { useFunnel } from "@use-funnel/browser";
-import dynamic from "next/dynamic";
-import {
-  BaseSchema,
-  EventInfoSchema,
-  PaymentSchema,
-  useAddEventForm,
-} from "../../../../hooks/use-add-event-form";
-
-const StepBasicInfo = dynamic(() => import("./step/step-basic-info"), {
-  ssr: false,
-});
-
-const StepEventInfo = dynamic(() => import("./step/step-event-info"), {
-  ssr: false,
-});
-
-const StepPaymentInfo = dynamic(() => import("./step/step-payment-info"), {
-  ssr: false,
-});
+import StepAccountInfo from "./step/step-account-info";
+import StepBasicInfo from "./step/step-basic-info";
+import StepEventInfo from "./step/step-event-info";
 
 export default function EventAddSection() {
-  const { form, onSubmit } = useAddEventForm();
-
-  const funnel = useFunnel({
+  const funnel = useFunnel<{
+    기본정보: {};
+    행사정보: {};
+    입금정보: {};
+  }>({
     id: "event-add",
-    steps: {
-      기본정보: {
-        parse: BaseSchema.parse,
-      },
-      행사정보: {
-        parse: EventInfoSchema.parse,
-      },
-      입금정보: {
-        parse: PaymentSchema.parse,
-      },
-    },
     initial: {
       step: "기본정보",
       context: {},
@@ -45,57 +20,21 @@ export default function EventAddSection() {
   });
 
   return (
-    <section className="w-full h-3/4 rounded-lg flex">
-      <Form {...form}>
-        <funnel.Render
-          기본정보={({ history }) => (
-            <StepBasicInfo
-              onNext={values => {
-                history.push("행사정보", {
-                  eventType: values.eventType,
-                  eventName: values.eventName,
-                  eventRound: values.eventRound,
-                  ticketingDate: values.ticketingDate,
-                  location: values.location,
-                  totalTicketCount: values.totalTicketCount,
-                });
-              }}
-            />
-          )}
-          행사정보={({ history }) => (
-            <StepEventInfo
-              onPrev={() => history.back()}
-              onNext={values => {
-                history.push("입금정보", {
-                  details: {
-                    information: values.details.information,
-                    caution: values.details.caution,
-                  },
-                  contact: {
-                    type: values.contact.type,
-                    content: values.contact.content,
-                    link: values.contact.link,
-                  },
-                  uketEventImageId: values.uketEventImageId,
-                  thumbnailImageId: values.thumbnailImageId,
-                  banners: values.banners,
-                });
-              }}
-            />
-          )}
-          입금정보={({ history, context }) => (
-            <StepPaymentInfo
-              form={form}
-              onSubmit={onSubmit}
-              onPrev={() => history.back()}
-              onNext={() => {}}
-              uketEventImage={context.uketEventImageId}
-              thumbnailImage={context.thumbnailImageId}
-              bannerImageList={context.banners}
-            />
-          )}
-        />
-      </Form>
+    <section className="w-full h-3/4 rounded-lg flex ">
+      <funnel.Render
+        기본정보={({ history }) => (
+          <StepBasicInfo onNext={() => history.push("행사정보")} />
+        )}
+        행사정보={({ history }) => (
+          <StepEventInfo
+            onPrev={() => history.back()}
+            onNext={() => history.push("입금정보")}
+          />
+        )}
+        입금정보={({ history }) => (
+          <StepAccountInfo onPrev={() => history.back()} onNext={() => {}} />
+        )}
+      />
     </section>
   );
 }
