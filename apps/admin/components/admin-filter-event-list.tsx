@@ -14,7 +14,7 @@ const AdminFilterEvent = ({
   return (
     <div
       onClick={onClick}
-      className={`px-3 py-1 text-xs rounded cursor-pointer ${
+      className={`px-3 py-1 text-xs rounded font-medium cursor-pointer ${
         isActive ? "bg-brand text-white" : "bg-white text-brand"
       }`}
     >
@@ -25,7 +25,7 @@ const AdminFilterEvent = ({
 
 interface AdminFilterEventListProps {
   currentEventId?: number;
-  onChangeEventId: (eventId?: number, eventName?: string) => void;
+  onChangeEventId: (eventId?: number) => void;
 }
 
 export default function AdminFilterEventList({
@@ -40,14 +40,14 @@ export default function AdminFilterEventList({
         key={-1}
         eventName="전체"
         isActive={currentEventId === undefined}
-        onClick={() => onChangeEventId(undefined, "전체")}
+        onClick={() => onChangeEventId(undefined)}
       />
       {data?.map(({ eventId, eventName }) => (
         <AdminFilterEvent
           key={eventId}
           eventName={eventName}
           isActive={currentEventId === eventId}
-          onClick={() => onChangeEventId(eventId, eventName)}
+          onClick={() => onChangeEventId(eventId)}
         />
       ))}
     </div>
