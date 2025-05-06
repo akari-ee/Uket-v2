@@ -1,9 +1,8 @@
-import { useMutationChangeEventStatus } from "@uket/api/mutations/use-mutation-change-event-status";
+// import { useMutationChangeTicketStatus } from "@uket/api/mutations/use-mutation-change-ticket-status";
 import { useMutationChangeTicketStatus } from "@uket/api/mutations/use-mutation-change-ticket-status";
 import { EVENT_STATUS_INFO } from "@uket/api/types/admin-event";
 import { TICKET_STATUS_INFO } from "@uket/api/types/admin-ticket";
 import {
-  NonSelectTrigger,
   Select,
   SelectContent,
   SelectItem,
@@ -19,7 +18,6 @@ interface TicketStatusSelectorProps {
   status: string;
   name: string;
   page: number;
-  changeable?: boolean;
 }
 
 export default function StatusSelector({
@@ -28,18 +26,16 @@ export default function StatusSelector({
   status,
   name,
   page,
-  changeable = false,
 }: TicketStatusSelectorProps) {
-  const stateInfo = isTicket ? TICKET_STATUS_INFO : EVENT_STATUS_INFO;
-
+  const statusInfo = isTicket ? TICKET_STATUS_INFO : EVENT_STATUS_INFO;
   const ticketMutation = useMutationChangeTicketStatus(page);
-  const eventMutation = useMutationChangeEventStatus(page);
+  const mutation = isTicket ? ticketMutation : null;
 
-  const currentItem = stateInfo.find(item => item.text === status)!;
+  const currentItem = statusInfo.find(item => item.text === status)!;
 
   const [selectedText, setSelectedText] = useState<string>(currentItem.text);
   const [isOpen, setIsOpen] = useState(false);
-  const [newStatusText, setNewStatusText] = useState<string>(currentItem.text);
+  const [newStatusText, setNewStatusText] = useState<string>(selectedText);
 
   const handleSelectChange = (text: string) => {
     setNewStatusText(text);
@@ -47,21 +43,13 @@ export default function StatusSelector({
   };
 
   const handleConfirmChange = () => {
-    const newValue = stateInfo.find(item => item.text === newStatusText)!.value;
+    const newTicketValue = statusInfo.find(
+      item => item.text === newStatusText,
+    )!.value;
 
-    if (isTicket) {
-      ticketMutation.mutate(
-        { ticketId: id, status: newValue },
-        {
-          onSuccess: () => {
-            setIsOpen(false);
-            setSelectedText(newStatusText);
-          },
-        },
-      );
-    } else {
-      eventMutation.mutate(
-        { uketEventRegistrationId: id, registrationStatus: newValue },
+    if (mutation != null) {
+      mutation.mutate(
+        { ticketId: id, status: newTicketValue },
         {
           onSuccess: () => {
             setIsOpen(false);
@@ -75,34 +63,21 @@ export default function StatusSelector({
   return (
     <>
       <Select value={currentItem.text} onValueChange={handleSelectChange}>
-        <>
-          {changeable ? (
-            <SelectTrigger
-              className="h-7 max-w-28 gap-2 rounded-lg px-2 py-px leading-tight text-[#2F2F37]"
-              style={{ backgroundColor: currentItem.color }}
-            >
-              <SelectValue placeholder={currentItem.text} />
-            </SelectTrigger>
-          ) : (
-            <NonSelectTrigger
-              className="h-7 max-w-28 gap-2 rounded-lg px-2 py-px leading-tight text-[#2F2F37]"
-              style={{ backgroundColor: currentItem.color }}
-            >
-              <SelectValue placeholder={currentItem.text} />
-            </NonSelectTrigger>
-          )}
-
-          <SelectContent>
-            {stateInfo.map(item => (
-              <SelectItem key={item.value} value={item.text}>
-                {item.text}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </>
+        <SelectTrigger
+          className="h-7 max-w-28 gap-2 rounded-lg px-2 py-px leading-tight text-[#2F2F37]"
+          style={{ backgroundColor: currentItem.color }}
+        >
+          <SelectValue placeholder={currentItem.text} />
+        </SelectTrigger>
+        <SelectContent>
+          {statusInfo.map(item => (
+            <SelectItem key={item.value} value={item.text}>
+              {item.text}
+            </SelectItem>
+          ))}
+        </SelectContent>
       </Select>
       <StatusChangeDialog
-        isTicket={isTicket}
         name={name}
         isOpen={isOpen}
         onOpenDialog={setIsOpen}

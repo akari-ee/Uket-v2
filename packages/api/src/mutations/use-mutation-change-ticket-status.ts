@@ -13,7 +13,7 @@ export const useMutationChangeTicketStatus = (page: number) => {
   const mutation = useMutation({
     mutationFn: async ({ ticketId, status }: ChangeTicketParams) => {
       const { data } = await fetcherAdmin.patch<ChangeTicketResponse>(
-        `/${ticketId}/status/${status}`,
+        `/ticket/${ticketId}/status/${status}`,
       );
 
       return data;
