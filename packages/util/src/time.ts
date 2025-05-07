@@ -37,5 +37,3 @@ export const formatDate = (date: string, type: FormatType) => {
     .format(formatType[type])
     .toString();
 };
-
-export * from "date-fns";

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -9,43 +8,44 @@ import {
   EditorContent,
   type EditorInstance,
   EditorRoot,
+  type JSONContent,
   handleCommandNavigation,
 } from "novel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { defaultExtensions } from "./extensions";
 import { slashCommand, suggestionItems } from "./slash-command";
 
 import "@uket/ui/prosemirror.css";
-import { ControllerRenderProps, FieldValues } from "react-hook-form";
 
 const extensions = [...defaultExtensions, slashCommand];
 
-interface EventEditorProps {
-  field: ControllerRenderProps<FieldValues, any>;
-  id: string;
-}
+export default function EventEditor() {
+  const [initialContent, setInitialContent] = useState<JSONContent>();
+  const [charsCount, setCharsCount] = useState();
 
-export default function EventEditor({ field, id }: EventEditorProps) {
-  const [charsCount, setCharsCount] = useState(0);
   const debouncedUpdates = async (editor: EditorInstance) => {
     const json = editor.getJSON();
-
-    setCharsCount(field.value.length);
-    field.onChange(editor.storage.markdown.getMarkdown());
-
-    window.localStorage.setItem(`novel-content-${id}`, JSON.stringify(json));
+    setCharsCount(editor.storage.characterCount.words());
+    window.localStorage.setItem("novel-content", JSON.stringify(json));
     window.localStorage.setItem(
-      `markdown-${id}`,
+      "markdown",
       editor.storage.markdown.getMarkdown(),
     );
   };
 
+  useEffect(() => {
+    const content = window.localStorage.getItem("novel-content");
+    if (content) setInitialContent(JSON.parse(content));
+  }, []);
+
   return (
     <div className="relative">
-      <div className="flex absolute right-2 bottom-0 z-10 mb-2 gap-2">
+      <div className="flex absolute right-5 bottom-0 z-10 mb-5 gap-2">
         <div
           className={
-            "rounded-lg px-2 py-1 text-sm text-muted-foreground text-[#CCCCCC]"
+            charsCount
+              ? "rounded-lg px-2 py-1 text-sm text-muted-foreground"
+              : "hidden"
           }
         >
           {charsCount}/1,000
@@ -53,10 +53,9 @@ export default function EventEditor({ field, id }: EventEditorProps) {
       </div>
       <EditorRoot>
         <EditorContent
-          immediatelyRender={false}
-          initialContent={field.value}
+          initialContent={initialContent}
           extensions={extensions}
-          className="relative h-60 w-full border border-formInput bg-background sm:rounded-lg overflow-y-scroll"
+          className="relative h-60 w-full border border-formInput bg-background sm:rounded-lg"
           editorProps={{
             handleDOMEvents: {
               keydown: (_view, event) => handleCommandNavigation(event),
@@ -65,6 +64,7 @@ export default function EventEditor({ field, id }: EventEditorProps) {
               class:
                 "prose prose-sm dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full",
             },
+            
           }}
           onUpdate={({ editor }) => {
             debouncedUpdates(editor);
@@ -72,14 +72,14 @@ export default function EventEditor({ field, id }: EventEditorProps) {
         >
           <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
             <EditorCommandEmpty className="px-2 text-sm">
-              결과가 없습니다.
+              No results
             </EditorCommandEmpty>
             <EditorCommandList>
               {suggestionItems.map(item => (
                 <EditorCommandItem
                   value={item.title}
                   onCommand={val => item.command?.(val)}
-                  className="flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-[#eeeeee] aria-selected:bg-[#eeeeee]"
+                  className="flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-accent aria-selected:bg-accent"
                   key={item.title}
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-md border border-muted bg-background">
