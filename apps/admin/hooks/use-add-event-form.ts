@@ -76,19 +76,18 @@ export const BaseSchema = z
     ),
     paymentInfo: z.object({
       isFree: z.enum(["무료", "유료"]).default("무료"),
-      ticketPrice: z.number().default(100),
+      ticketPrice: z.number().default(0),
       bankCode: z.string({
-        message: "입금 은행을 선택해 주세요.",
+        message: "은행을 선택해 주세요.",
       }).or(z.literal("")),
       accountNumber: z.string({
-        message: "입금 계좌를 입력해 주세요",
+        message: "계좌번호를 입력해 주세요.",
       }).or(z.literal("")),
       depositorName: z.string({
-        message: "예금주를 입력해 주세요",
+        message: "예금주를 입력해 주세요.",
       }).or(z.literal("")),
-      depositUrl: z.string({
-        message: "송금 코드 링크를 입력해 주세요",
-      }).url({
+      depositUrl: z.string().url({
+        message: "입금 정보를 입력해 주세요.",
       }).or(z.literal("")),
     }),
   })
@@ -160,11 +159,11 @@ export const useAddEventForm = () => {
       ],
       paymentInfo: {
         isFree: "무료",
-        ticketPrice: 100,
-        bankCode: undefined,
-        accountNumber: undefined,
-        depositorName: undefined,
-        depositUrl: undefined,
+        ticketPrice: 0,
+        bankCode: "",
+        accountNumber: "",
+        depositorName: "",
+        depositUrl: "",
       },
     },
     reValidateMode: "onChange",
