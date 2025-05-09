@@ -4,21 +4,17 @@ import { getQueryClient } from "../get-query-client";
 import { adminUser } from "../queries/admin-user";
 import { AdminRemoveParams, AdminUserListResponse } from "../types/admin-user";
 
-export const useMutationAddAdmin = (page: number) => {
-  const queryClient = getQueryClient();
-
+export const useMutationAddAdmin = () => {
   const mutation = useMutation({
     mutationKey: ["addAdmin"],
     mutationFn: async ({
       name,
       email,
-      phone,
       organization,
       authority,
     }: {
       name: string;
       email: string;
-      phone: string;
       organization: string;
       authority: string;
     }) => {
@@ -26,42 +22,13 @@ export const useMutationAddAdmin = (page: number) => {
         name,
         email,
         organization,
-        phone,
-        isSuperAdmin: authority === "관리자",
+        authority,
       });
 
       return data;
     },
-    onMutate: async () => {
-      const previousData = queryClient.getQueryData<AdminUserListResponse>([
-        ...adminUser.list({ page }).queryKey,
-      ]);
-
-      await queryClient.cancelQueries({
-        queryKey: adminUser.list({ page }).queryKey,
-      });
-
-      if (previousData) {
-        queryClient.setQueryData<AdminUserListResponse>(
-          [...adminUser.list({ page }).queryKey],
-          { ...previousData },
-        );
-      }
-
-      return { previousData, mutationKey: "addAdmin" };
-    },
-    onError: (error, variables, context) => {
-      if (context?.previousData) {
-        queryClient.setQueryData(
-          [...adminUser.list({ page }).queryKey],
-          context.previousData,
-        );
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: adminUser.list({ page }).queryKey,
-      });
+    onMutate: () => {
+      return { mutationKey: "addAdmin" };
     },
   });
 
