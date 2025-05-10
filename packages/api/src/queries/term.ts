@@ -9,7 +9,7 @@ export const term = createQueryKeys("term", {
   list: () => ({
     queryKey: ["term-list"],
     queryFn: async () => {
-      const { data } = await fetcher.get<TermListResponse>("/terms/check-required");
+      const { data } = await fetcher.get<TermListResponse>("/terms");
 
       return data.items;
     },
