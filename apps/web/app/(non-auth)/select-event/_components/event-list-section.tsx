@@ -1,13 +1,13 @@
 "use client";
 
+import { Button } from "@ui/components/ui/button";
 import { Skeleton } from "@ui/components/ui/skeleton";
-import { useRouter } from "next/navigation";
+import { cn } from "@ui/lib/utils";
 import { Suspense } from "react";
 import EventListErrorFallback from "../../../../components/error-fallback/event-list-error-fallback";
 import RetryApiErrorBoundary from "../../../../components/retry-api-error-boundary";
-import { useEventTypeParams } from "../../../../hooks/use-event-type-params";
-import UketEventList from "./uket-event-list";
-import UketEventTypeSelector from "./uket-event-type-selector";
+import { useSelectEvent } from "../../../../hooks/use-select-event";
+import EventList from "./event-list";
 
 const EventListFallback = () => {
   return (
@@ -27,21 +27,30 @@ const EventListFallback = () => {
 };
 
 export default function EventListSection() {
-  const router = useRouter();
-  const { eventType } = useEventTypeParams();
-
-  const handleSelectEvent = (eventName: string, eventId: number) => {
-    router.push(`/home/${eventName}/${eventId}`);
-  };
+  const { selectedEventId, handleSelectEvent, handleNavigate } =
+    useSelectEvent();
 
   return (
-    <section className="grow flex flex-col gap-5">
-      <UketEventTypeSelector />
+    <section className="grow flex flex-col">
       <RetryApiErrorBoundary fallback={<EventListErrorFallback />}>
         <Suspense fallback={<EventListFallback />}>
-          <UketEventList onSelect={handleSelectEvent} eventType={eventType} />
+          <EventList
+            selectedEventId={selectedEventId}
+            onSelect={handleSelectEvent}
+          />
         </Suspense>
       </RetryApiErrorBoundary>
+      <footer className="container sticky bottom-0 flex w-full flex-col items-center justify-center">
+        <Button
+          className={cn(
+            "bg-formInput text-buttonDisabled hover:bg-formInput w-full rounded-xl p-6 text-base font-black",
+            selectedEventId && "bg-brand hover:bg-brand/80 text-white",
+          )}
+          onClick={handleNavigate}
+        >
+          다음으로
+        </Button>
+      </footer>
     </section>
   );
 }

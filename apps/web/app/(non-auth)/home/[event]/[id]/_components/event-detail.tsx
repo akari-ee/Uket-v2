@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useQueryUketEventDetail } from "@uket/api/queries/uket-event";
+import { useQueryFestivalDetail } from "@uket/api/queries/festival";
 import { useEffect } from "react";
 import CarouselT from "./carousel/Carousel";
 import KakaoMap from "./kakao-map";
@@ -13,7 +13,7 @@ interface EventDetailProps {
 }
 
 export default function EventDetail({ eventId, onMount }: EventDetailProps) {
-  const { data } = useQueryUketEventDetail(parseInt(eventId));
+  const { data } = useQueryFestivalDetail(parseInt(eventId));
 
   useEffect(() => {
     if (data) {
