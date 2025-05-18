@@ -11,20 +11,15 @@ export function useTermAgreement() {
     setAgreements(storedAgreements);
   }, []);
 
-  const handleToggleAgreement = ({
-    type,
-    termId,
-    isAgreed,
-    documentId,
-  }: TermAgreedParams) => {
+  const handleToggleAgreement = ({ termId, isAgreed }: TermAgreedParams) => {
     const existingIndex = agreements.findIndex(item => item.termId === termId);
     let newAgreements: TermAgreedParams[];
 
     if (existingIndex >= 0) {
       newAgreements = [...agreements];
-      newAgreements[existingIndex] = { type, termId, isAgreed, documentId };
+      newAgreements[existingIndex] = { termId, isAgreed };
     } else {
-      newAgreements = [...agreements, { type, termId, isAgreed, documentId }];
+      newAgreements = [...agreements, { termId, isAgreed }];
     }
 
     sessionStorage.setItem("agreements", JSON.stringify(newAgreements));

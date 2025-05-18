@@ -45,18 +45,16 @@ export default function StepTerm({ onNext, onPrev }: StepControllerProps) {
             />
           }
         >
-          <TermSection
-            onToggle={handleToggleAgreement}
-            agreements={agreements}
-          />
+          <TermSection onToggle={handleToggleAgreement} agreements={agreements} />
         </Suspense>
       </ActivityContent>
       <ActivityFooter>
         <StepNextController
           onNext={handleNextStep}
-          disabled={agreements.some(
-            agreement => agreement.type === "MANDATORY" && !agreement.isAgreed,
-          )}
+          disabled={
+            agreements.length !== 2 ||
+            agreements.some(agreement => !agreement.isAgreed)
+          }
         />
       </ActivityFooter>
     </Activity>

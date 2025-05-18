@@ -14,7 +14,6 @@ export const useMutationChangeTicketStatus = (page: number) => {
     mutationFn: async ({ ticketId, status }: ChangeTicketParams) => {
       const { data } = await fetcherAdmin.patch<ChangeTicketResponse>(
         `/${ticketId}/status/${status}`,
-        null,
       );
 
       return data;
