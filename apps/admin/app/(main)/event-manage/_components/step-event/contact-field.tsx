@@ -16,7 +16,7 @@ import {
 import { Control, FieldValues, useWatch } from "react-hook-form";
 
 type ContactType = {
-  type: "INSTAGRAM" | "KAKAO" | "전화번호" | "기타";
+  type: "INSTAGRAM" | "KAKAO" | "CONTACT" | "ETC";
   value: "인스타그램" | "카카오톡" | "연락처" | "기타";
 };
 
@@ -33,8 +33,8 @@ type DisplayOption = {
 const contact: ContactType[] = [
   { type: "INSTAGRAM", value: "인스타그램" },
   { type: "KAKAO", value: "카카오톡" },
-  { type: "전화번호", value: "연락처" },
-  { type: "기타", value: "기타" },
+  { type: "CONTACT", value: "연락처" },
+  { type: "ETC", value: "기타" },
 ];
 
 const displayOption: DisplayOption = {
@@ -48,11 +48,11 @@ const displayOption: DisplayOption = {
     placeholder: "ex. UKET",
     linkPlaceholder: "https://pf.kakao.com/...",
   },
-  전화번호: {
+  CONTACT: {
     label: "연락처",
     placeholder: "ex. 010-1234-5678",
   },
-  기타: {
+  ETC: {
     label: "기타 문의 방법",
     placeholder: "이메일 주소 또는 다른 연락 방법 입력",
   },
