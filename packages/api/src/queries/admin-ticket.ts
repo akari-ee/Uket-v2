@@ -90,15 +90,13 @@ export const adminTicket = createQueryKeys("admin-ticket", {
       const searchRequest = getAdminTicketRequest(searchType, value);
 
       if (searchRequest !== null) {
-        const effectiveSize = size === 0 ? DEFAULT_PAGE_SIZE : size;
-
         const { data } = await fetcherAdmin.get<TicketListResponse>(`/search`, {
           mode: "BOUNDARY",
           params: {
             searchType,
             [searchRequest.type]: searchRequest.value,
             page,
-            size: effectiveSize,
+            size,
             uketEventId,
           },
         });

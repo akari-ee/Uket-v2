@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { fetcherAdmin } from "../admin-instance";
-import { onErrorHandler } from "../error/handler";
 import { getQueryClient } from "../get-query-client";
 import { adminTicket } from "../queries/admin-ticket";
 import {
@@ -15,14 +14,6 @@ export const useMutationChangeTicketStatus = (page: number) => {
     mutationFn: async ({ ticketId, status }: ChangeTicketParams) => {
       const { data } = await fetcherAdmin.patch<ChangeTicketResponse>(
         `/${ticketId}/status/${status}`,
-        null,
-        {
-          mode: "TOAST_UI",
-          errorContent: {
-            title: "행사 상태 변경 에러",
-            description: "변경할 수 없는 상태입니다.",
-          },
-        },
       );
 
       return data;
@@ -53,8 +44,6 @@ export const useMutationChangeTicketStatus = (page: number) => {
           context.previousData,
         );
       }
-
-      onErrorHandler(error);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
