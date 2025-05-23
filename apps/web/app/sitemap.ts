@@ -1,16 +1,15 @@
 import { fetcher } from "@uket/api/instance";
-import { UketEventListResponse } from "@uket/api/types/uket-event";
+import { FestivalUniversityResponse } from "@uket/api/types/univ";
 import { MetadataRoute } from "next";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { data: eventList } = await fetcher.get<UketEventListResponse>(
-    `/uket-events?type=ALL`,
-  );
+  const { data: eventList } =
+    await fetcher.get<FestivalUniversityResponse>(`/universities`);
 
-  const events: MetadataRoute.Sitemap = eventList.events.map(event => ({
-    url: `https://uket.co.kr/home/${event.eventName}/${event.eventId}`,
+  const events: MetadataRoute.Sitemap = eventList.items.map(event => ({
+    url: `https://uket.co.kr/home/${event.eventName}/${event.id}`,
     lastModified: new Date(),
     changeFrequency: "hourly",
     priority: 1,
