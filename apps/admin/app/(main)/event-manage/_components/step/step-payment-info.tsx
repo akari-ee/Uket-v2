@@ -21,7 +21,6 @@ interface StepPaymentInfoProps {
   uketEventImage: FieldValues["uketEventImageId"];
   thumbnailImage: FieldValues["thumbnailImageId"];
   bannerImageList: FieldValues["banners"];
-  isModify?: boolean;
 }
 
 export default function StepPaymentInfo({
@@ -31,7 +30,6 @@ export default function StepPaymentInfo({
   uketEventImage,
   thumbnailImage,
   bannerImageList,
-  isModify = false,
 }: StepPaymentInfoProps) {
   const { control, setValue, trigger } = useFormContext();
   const isFree = useWatch({
@@ -91,7 +89,6 @@ export default function StepPaymentInfo({
       setValue("paymentInfo.depositorName", "");
       setValue("paymentInfo.depositUrl", "");
     } else {
-      if (isModify) return;
       setValue("paymentInfo.ticketPrice", 100);
       setValue("paymentInfo.bankCode", undefined);
       setValue("paymentInfo.accountNumber", undefined);
