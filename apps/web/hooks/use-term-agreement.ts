@@ -1,4 +1,4 @@
-import { Term, TermAgreedParams } from "@uket/api/types/term";
+import { TermAgreedParams } from "@uket/api/types/term";
 import { useEffect, useState } from "react";
 
 export function useTermAgreement() {
@@ -10,27 +10,6 @@ export function useTermAgreement() {
     );
     setAgreements(storedAgreements);
   }, []);
-
-  const initAgreement = (data: Term[]) => {
-    const initialAgreements = data.map(term => ({
-      type: term.type,
-      termId: term.termsId,
-      isAgreed: false,
-      documentId: term.documentId,
-    }));
-
-    setAgreements(initialAgreements);
-  };
-
-  const handleAgreementAll = (checked: boolean) => {
-    const newAgreements = agreements.map(agreement => ({
-      ...agreement,
-      isAgreed: checked,
-    }));
-
-    sessionStorage.setItem("agreements", JSON.stringify(newAgreements));
-    setAgreements(newAgreements);
-  };
 
   const handleToggleAgreement = ({
     type,
@@ -55,7 +34,5 @@ export function useTermAgreement() {
   return {
     agreements,
     handleToggleAgreement,
-    handleAgreementAll,
-    initAgreement,
   };
 }
