@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
@@ -5,7 +6,7 @@ import { Badge } from "@ui/components/ui/badge";
 import { cn } from "@ui/lib/utils";
 import { useQueryAdminEventInfoList } from "@uket/api/queries/admin-event-info";
 import { Content } from "@uket/api/types/admin-event";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import StatusSelector from "../../../../components/status-selector";
 import { useEventManageParams } from "../../../../hooks/use-event-manage-params";
@@ -95,7 +96,9 @@ export const columns = (
     accessorKey: "eventInfo",
     header: () => <div>행사 정보</div>,
     cell: ({ row }) => {
+      const eventId = row.original.uketEventRegistrationId;
       const isEditable = row.original.isModifiable;
+      const router = useRouter();
 
       const style = isEditable
         ? "bg-[#F0EDFD] text-brand hover:bg-[#F0EDFD]"
@@ -109,6 +112,10 @@ export const columns = (
             "h-8 w-28 justify-center rounded-lg text-base cursor-pointer font-medium",
             style,
           )}
+          onClick={() => {
+            if (!isEditable) return;
+            router.push(`/event-manage/modify/${eventId}`);
+          }}
         >
           {content}
         </Badge>
@@ -122,9 +129,6 @@ export default function EventTableSection({
 }: {
   isSuperAdmin?: boolean;
 }) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
   const { page, eventType, updateQuery } = useEventManageParams();
 
   const { data: events } = useQueryAdminEventInfoList({
@@ -134,23 +138,14 @@ export default function EventTableSection({
   const itemsPerPage = 10;
 
   const filteredEvents = useMemo(() => {
-    if (!events) {
-      router.push(`/event-manage/add`);
-    }
-
+    if (!events) return [];
     if (eventType === "ALL") return events.timezoneData;
     return events.timezoneData.filter(entry => entry.eventType === eventType);
-  }, [events, eventType, router]);
+  }, [events, eventType]);
 
   const pageCount = useMemo(() => {
     return Math.ceil(filteredEvents.length / itemsPerPage);
   }, [filteredEvents]);
-
-  const handlePageChange = (newPage: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", newPage.toString());
-    router.push(`?${params.toString()}`);
-  };
 
   return (
     <section className="flex flex-col gap-3">
@@ -160,7 +155,7 @@ export default function EventTableSection({
         )}
         data={filteredEvents}
         pageIndex={page}
-        setPageIndex={handlePageChange}
+        setPageIndex={newPage => updateQuery({ page: newPage })}
         pageCount={pageCount || 1}
       />
     </section>
