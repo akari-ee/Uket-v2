@@ -10,8 +10,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import StatusSelector from "../../../../components/status-selector";
 import { useEventManageParams } from "../../../../hooks/use-event-manage-params";
-import EventTable from "./event-table";
 import EventTypeFilter, { EventType } from "./event-type-filter";
+import EventTable from "./event-table";
 
 export type Entry = Content;
 
