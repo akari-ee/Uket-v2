@@ -156,7 +156,7 @@ export default function EventTableSection({
 
   useEffect(() => {
     if (events.empty) router.push(`/event-manage/add`);
-  }, [events, router]);
+  }, [events.empty, router]);
 
   return (
     <section className="flex flex-col gap-3">
