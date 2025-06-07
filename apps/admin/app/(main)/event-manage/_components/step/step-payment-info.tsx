@@ -60,20 +60,12 @@ export default function StepPaymentInfo({
     if (!isValid) return;
 
     const formData = new FormData();
-
     formData.append("eventImage", uketEventImage.file!);
     formData.append("thumbnailImage", thumbnailImage.file!);
 
-    if (bannerImageList.length > 0 && bannerImageList[0]?.file) {
-      bannerImageList.forEach((banner: FieldValues["banners"]) => {
-        if (banner.file) {
-          formData.append("bannerImages", banner.file);
-        }
-      });
-    } else {
-      // Add this line to explicitly set banners to empty array if no banners are uploaded
-      setValue("banners", []);
-    }
+    bannerImageList.forEach((banner: FieldValues["banners"]) => {
+      formData.append("bannerImages", banner.file!);
+    });
 
     await mutateAsync(formData, {
       onSuccess: data => {
@@ -82,12 +74,9 @@ export default function StepPaymentInfo({
 
         setValue("uketEventImageId.id", uketEventImageId);
         setValue("thumbnailImageId.id", thumbnailImageId);
-
-        if (bannerImageIdList[0] !== "") {
-          bannerImageIdList.forEach((bannerImageId: string, index: number) =>
-            setValue(`banners.${index}.id`, bannerImageId),
-          );
-        }
+        bannerImageIdList.forEach((bannerImageId: string, index: number) =>
+          setValue(`banners.${index}.id`, bannerImageId),
+        );
 
         form.handleSubmit(onSubmit)();
       },

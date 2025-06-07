@@ -75,7 +75,9 @@ export const BaseSchema = z
         file:
           typeof window === "undefined"
             ? z.any()
-            : z.instanceof(File).nullish(),
+            : z.instanceof(File, {
+                message: "이미지를 추가해 주세요.",
+              }),
         previewImage: z.string().nullish(),
         link: z.string().url().or(z.literal("")),
         id: z.string().nullish(),
