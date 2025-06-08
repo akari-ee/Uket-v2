@@ -10,12 +10,7 @@ import {
 } from "@uket/util/path";
 import axios, { AxiosResponse } from "axios";
 
-const isProduction =
-  process.env.NODE_ENV === "production" &&
-  process.env.NEXT_PUBLIC_VERCEL_ENV === "production";
-const BASE_URL = isProduction
-  ? `https://api.uket.co.kr`
-  : `https://dev.api.uket.co.kr`;
+const BASE_URL = `https://api.uket.co.kr`;
 const API_TYPE = "/admin";
 
 const instance = axios.create({
@@ -28,24 +23,21 @@ const instance = axios.create({
 
 instance.interceptors.request.use(async config => {
   const url = config.url;
-  if (typeof window === "undefined") {
+  const headers = config.headers || {};
+
+  if (!headers.Authorization) {
+    const tokenGetter =
+      typeof window === "undefined" ? getTokenServer : getToken;
     if (
       url &&
       (isAdminDynamicUrlMatched(url) || isAdminStaticUrlMatched(url))
     ) {
-      const accessToken = await getTokenServer("admin", "access");
-      if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-  } else {
-    if (
-      url &&
-      (isAdminDynamicUrlMatched(url) || isAdminStaticUrlMatched(url))
-    ) {
-      const accessToken = getToken("admin", "access");
-      if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+      const accessToken = await tokenGetter("admin", "access");
+      if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
     }
   }
 
+  config.headers = headers;
   return config;
 });
 
