@@ -16,7 +16,6 @@ export type AdminLoginResponse = {
 export type AdminUserInfoResponse = {
   adminId: number;
   organization: string;
-  phoneNumber: string;
   organizationId: number;
   name: string;
   email: string;

@@ -101,6 +101,7 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
         ticketingStartDateTime: new Date(eventInfo?.ticketingStartDateTime!),
         ticketingEndDateTime: new Date(eventInfo?.ticketingEndDateTime!),
       };
+      const entryGroup = eventInfo?.entryGroup;
       const eventRound = eventInfo?.eventRound.map(item => {
         const [hours, minutes] = item.startTime.split(":").map(Number);
         const date = new Date(item.date);
@@ -139,12 +140,14 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
         base: eventInfo?.location!,
         detail: "",
       };
+
       return {
         eventType: data.eventType,
         data: {
           ...eventInfo,
           eventType,
           ticketingDate,
+          entryGroup,
           paymentInfo,
           uketEventImageId,
           thumbnailImageId,
@@ -157,11 +160,11 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
   });
 };
 
-export const prefetchAdminEventInfoList = async (page: number) => {
+export const prefetchAdminEventInfoList = (page: number) => {
   const queryClient = getQueryClient();
-  const data = await queryClient.fetchQuery({ ...adminEventInfo.list({ page }) });
+  queryClient.prefetchQuery({ ...adminEventInfo.list({ page }) });
 
-  return {data, prefetchState: dehydrate(queryClient)};
+  return dehydrate(queryClient);
 };
 
 export const prefetchAdminEventInfoDetail = (id: string) => {
