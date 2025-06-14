@@ -1,6 +1,5 @@
 import { Separator } from "@ui/components/ui/separator";
 import { FieldValues, useFormContext, useWatch } from "react-hook-form";
-import EntryGroupField from "../step-basic/entry-group-field";
 import EventCalendarField from "../step-basic/event-calendar-field";
 import EventNameField from "../step-basic/event-name-field";
 import EventTypeField from "../step-basic/event-type-field";
@@ -18,7 +17,6 @@ interface StepBasicInfoProps {
       | "ticketingDate"
       | "location"
       | "totalTicketCount"
-      | "entryGroup"
     >,
   ) => void;
 }
@@ -40,7 +38,6 @@ export default function StepBasicInfo({ onNext }: StepBasicInfoProps) {
         "location.base",
         "location.detail",
         "totalTicketCount",
-        "entryGroup",
       ],
       { shouldFocus: true },
     );
@@ -57,7 +54,6 @@ export default function StepBasicInfo({ onNext }: StepBasicInfoProps) {
         detail: allFieldValues.location?.detail,
       },
       totalTicketCount: allFieldValues.totalTicketCount,
-      entryGroup: allFieldValues.entryGroup,
     };
 
     onNext(selectedValues);
@@ -93,7 +89,6 @@ export default function StepBasicInfo({ onNext }: StepBasicInfoProps) {
               <TicketCalendarField control={control} eventType={eventType} />
               <ZipcodeField control={control} onSetValue={setValue} />
               <TicketCountField control={control} />
-              <EntryGroupField control={control} />
             </aside>
           </section>
         </aside>
