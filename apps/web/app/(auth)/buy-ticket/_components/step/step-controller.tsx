@@ -38,7 +38,7 @@ function StepNextController({ disabled, onNext }: StepNextControllerProps) {
       onClick={onNext}
       disabled={disabled}
     >
-      예매하기
+      다음으로
     </Button>
   );
 }
