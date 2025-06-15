@@ -60,12 +60,6 @@ export const BaseSchema = z
       previewImage: z.string().nullish(),
       id: z.string().nullish(),
     }),
-    entryGroup: z.array(
-      z.object({
-        ticketCount: z.number(),
-        entryStartTime: z.string(),
-      }),
-    ),
     thumbnailImageId: z.object({
       file:
         typeof window === "undefined"
@@ -125,7 +119,6 @@ export const EventInfoSchema = BaseSchema.required({
   ticketingDate: true,
   location: true,
   totalTicketCount: true,
-  entryGroup: true,
 });
 
 // 입금 정보 스키마
