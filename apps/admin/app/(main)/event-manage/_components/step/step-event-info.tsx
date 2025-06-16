@@ -7,6 +7,7 @@ import {
   FormLabel,
 } from "@ui/components/ui/form";
 import { FieldValues, useFormContext } from "react-hook-form";
+import BulletListTextarea from "../editor/bullet-list-text-area";
 import EventEditor from "../editor/event-editor";
 import BannerImageField from "../step-event/banner-image-field";
 import ContactField from "../step-event/contact-field";
@@ -99,11 +100,7 @@ export default function StepEventInfo({ onPrev, onNext }: StepEventInfoProps) {
                     주의 사항
                   </FormLabel>
                   <FormControl>
-                    <EventEditor
-                      field={field}
-                      id={field.name}
-                      enableAutoBulletList
-                    />
+                    <BulletListTextarea field={field} id={field.name} />
                   </FormControl>
                 </FormItem>
               )}
