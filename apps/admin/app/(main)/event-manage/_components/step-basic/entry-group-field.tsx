@@ -38,10 +38,14 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
   };
 
   const handleAddGroup = () => {
-    if (fields.length >= 6) return;
+    if (fields.length >= 6) {
+      return;
+    }
 
     const remainingTickets = calculateRemainingTickets();
-    if (remainingTickets <= 0) return;
+    if (remainingTickets <= 0) {
+      return;
+    }
 
     append({
       ticketCount: undefined,
@@ -49,7 +53,6 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
       entryEndTime: undefined,
     });
   };
-
   return (
     <div className="grid w-full items-center gap-2">
       <FormLabel className="text-[#8989A1] text-base font-normal flex items-center gap-1">
@@ -83,14 +86,13 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
               <FormItem>
                 <TimeField
                   className="*:not-first:mt-2"
-                  aria-label="Entry group time"
                   {...field}
-                  value={field.value ?? { hour: 0, minute: 0 }}
-                  defaultValue={{ hour: 0, minute: 0 }}
                   onChange={e => {
                     field.onChange({
                       hour: e?.hour,
                       minute: e?.minute,
+                      second: 0,
+                      nano: 0,
                     });
                   }}
                 >
