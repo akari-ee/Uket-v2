@@ -11,7 +11,6 @@ import {
 import PaymentCodeField from "../step-payment/payment-code-field";
 import PaymentInfoField from "../step-payment/payment-info-field";
 import PaymentTicketPriceField from "../step-payment/payment-ticket-price-field";
-import PurchaseLimitField from "../step-payment/purchase-limit-field";
 import StepController from "./step-controller";
 
 interface StepPaymentInfoProps {
@@ -98,7 +97,6 @@ export default function StepPaymentInfo({
   useEffect(() => {
     if (isFree === "무료") {
       setValue("paymentInfo.ticketPrice", 0);
-      setValue("paymentInfo.purchaseLimit", "");
       setValue("paymentInfo.bankCode", "");
       setValue("paymentInfo.accountNumber", "");
       setValue("paymentInfo.depositorName", "");
@@ -133,7 +131,6 @@ export default function StepPaymentInfo({
                 control={control}
                 onSetValue={setValue}
               />
-              <PurchaseLimitField control={control} onSetValue={setValue}/>
               <PaymentInfoField control={control} isDisabled={isDisabled} />
             </aside>
             <aside className="flex flex-col gap-4 basis-1/2 pr-32">
