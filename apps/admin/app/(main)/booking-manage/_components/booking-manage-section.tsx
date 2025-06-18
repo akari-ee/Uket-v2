@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CircleHelpIcon } from "@ui/components/ui/icon";
 import { useQueryAdminTicketList } from "@uket/api/queries/admin-ticket";
 import { SearchType, TicketResponse } from "@uket/api/types/admin-ticket";
 import { useState } from "react";
@@ -11,15 +10,10 @@ import { useTicketBookParams } from "../../../../hooks/use-ticket-book-params";
 import BookingDataTable from "./booking-data-table";
 import DownloadCSV from "./download-csv";
 import SearchInput from "./search-input";
-import StatusHelpModal from "./status-help-modal";
 
 export type Entry = TicketResponse;
 
-export const columns = (
-  pageIndex: number,
-  isModalOpen: boolean,
-  setModalOpen: (open: boolean) => void,
-): ColumnDef<Entry>[] => [
+export const columns = (pageIndex: number): ColumnDef<Entry>[] => [
   {
     accessorKey: "depositorName",
     header: "입금자명",
@@ -42,20 +36,7 @@ export const columns = (
   },
   {
     accessorKey: "ticketStatus",
-    header: () => {
-      return (
-        <div className="flex gap-1 items-center justify-center">
-          <p>티켓 상태</p>
-          <button onClick={() => setModalOpen(true)}>
-            <CircleHelpIcon className="h-4 w-4 text-gray-500 hover:text-gray-800" />
-          </button>
-          <StatusHelpModal
-            open={isModalOpen}
-            onClose={() => setModalOpen(false)}
-          />
-        </div>
-      );
-    },
+    header: "티켓 상태",
     cell: ({ row }) => {
       const ticketId = row.original.ticketId;
       const ticketStatus = row.original.ticketStatus;
@@ -85,8 +66,6 @@ export const columns = (
 ];
 
 export default function BookingManageSection() {
-  const [isModalOpen, setModalOpen] = useState(false);
-
   const { page, searchType, searchValue, uketEventId, updateQuery } =
     useTicketBookParams();
 
@@ -150,7 +129,7 @@ export default function BookingManageSection() {
         </header>
         {ticketList && (
           <BookingDataTable
-            columns={columns(page, isModalOpen, setModalOpen)}
+            columns={columns(page)}
             data={ticketList.timezoneData}
             pageIndex={page}
             setPageIndex={newPage => updateQuery({ page: newPage })}

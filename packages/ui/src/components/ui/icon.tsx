@@ -23,7 +23,6 @@ export {
   ImageIcon,
   ItalicIcon,
   List,
-  ListIcon,
   LoaderCircle,
   LoaderCircleIcon,
   MinusIcon,
@@ -42,4 +41,5 @@ export {
   UnderlineIcon,
   UploadIcon,
   XIcon,
+  ListIcon,
 } from "lucide-react";
