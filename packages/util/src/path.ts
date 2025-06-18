@@ -1,7 +1,7 @@
 const AUTH_REQUIRED_PATH = [
   "/users/register",
   "/users/info",
-  "/users",
+  "/users/delete",
   "/tickets",
   "/users/tickets",
   "/tickets/:id/cancel",
@@ -16,6 +16,7 @@ const DYNAMIC_AUTH_REQUIRED_PATH = [
   /\/tickets\/\d+\/cancel/,
   /\/events\/\d+\/account/,
   /\/events\/\d+\/survey/,
+  /\/uket-events\/\d+\/reservation/,
 ];
 
 const ADMIN_STATIC_AUTH_REQUIRED_PATH = [
