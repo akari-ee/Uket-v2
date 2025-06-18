@@ -38,10 +38,14 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
   };
 
   const handleAddGroup = () => {
-    if (fields.length >= 20) return;
+    if (fields.length >= 6) {
+      return;
+    }
 
     const remainingTickets = calculateRemainingTickets();
-    if (remainingTickets <= 0) return;
+    if (remainingTickets <= 0) {
+      return;
+    }
 
     append({
       ticketCount: undefined,
@@ -49,7 +53,6 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
       entryEndTime: undefined,
     });
   };
-
   return (
     <div className="grid w-full items-center gap-2">
       <FormLabel className="text-[#8989A1] text-base font-normal flex items-center gap-1">
@@ -83,14 +86,13 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
               <FormItem>
                 <TimeField
                   className="*:not-first:mt-2"
-                  aria-label="Entry group time"
                   {...field}
-                  value={field.value ?? { hour: 0, minute: 0 }}
-                  defaultValue={{ hour: 0, minute: 0 }}
                   onChange={e => {
                     field.onChange({
                       hour: e?.hour,
                       minute: e?.minute,
+                      second: 0,
+                      nano: 0,
                     });
                   }}
                 >
@@ -114,7 +116,6 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
                     {...field}
                     onChange={e => {
                       const number = Number(e.target.value);
-                      field.onChange(number);
                       const remaining = calculateRemainingTickets();
 
                       if (number > remaining) {
@@ -151,7 +152,7 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
           variant="ghost"
           className="rounded-full hover:bg-[#f2f2f2]"
           onClick={handleAddGroup}
-          disabled={fields.length >= 20 || calculateRemainingTickets() <= 0}
+          disabled={fields.length >= 6 || calculateRemainingTickets() <= 0}
         >
           <PlusCircleIcon className="text-[#d9d9d9]" />
         </Button>
