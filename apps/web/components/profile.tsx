@@ -27,7 +27,7 @@ export default function Profile() {
           <div className="flex items-center gap-3">
             <div className="relative h-6 w-6">
               <Image
-                src={data.profileImagePath}
+                src={data.profileImage}
                 alt="프로필 이미지"
                 width={100}
                 height={100}

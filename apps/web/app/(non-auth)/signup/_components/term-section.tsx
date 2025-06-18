@@ -72,9 +72,7 @@ export default function TermSection({
               <div className="font-medium">
                 {term.type === "MANDATORY" ? "[필수]" : "[선택]"} {term.name}
               </div>
-              {term.termsId !== 3 && (
-                <ChevronRightIcon className="text-desc h-5 w-5" />
-              )}
+              <ChevronRightIcon className="text-desc h-5 w-5" />
             </Link>
           </div>
         ))}
