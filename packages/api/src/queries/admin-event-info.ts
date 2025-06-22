@@ -111,6 +111,8 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
           startTime: item.startTime,
         };
       });
+      const buyTicketLimit = eventInfo?.buyTicketLimit || 0;
+      const noLimit = (buyTicketLimit === 0 ? "제한 없음" : "제한");
       const paymentInfo = {
         isFree: (eventInfo?.paymentInfo.ticketPrice === 0
           ? "무료"
@@ -118,27 +120,18 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
         ...eventInfo?.paymentInfo!,
       };
       const uketEventImageId = {
-        file:
-          typeof window !== "undefined"
-            ? new File([""], "file.png", { type: "image/png" })
-            : undefined,
+        file: undefined,
         previewImage: undefined,
         id: eventInfo?.uketEventImageId,
       };
       const thumbnailImageId = {
-        file:
-          typeof window !== "undefined"
-            ? new File([""], "file.png", { type: "image/png" })
-            : undefined,
+        file: undefined,
         previewImage: undefined,
         id: eventInfo?.thumbnailImageId,
       };
       const banners = eventInfo?.banners.map(item => {
         return {
-          file:
-            typeof window !== "undefined"
-              ? new File([""], "file.png", { type: "image/png" })
-              : undefined,
+          file: undefined,
           previewImage: undefined,
           link: item.link,
           id: item.imageId.toString(),
@@ -160,6 +153,8 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
           banners,
           location,
           eventRound,
+          noLimit,
+          buyTicketLimit
         },
       };
     },
@@ -168,11 +163,9 @@ export const useQueryAdminEventInfoDetail = (id: string | undefined) => {
 
 export const prefetchAdminEventInfoList = async (page: number) => {
   const queryClient = getQueryClient();
-  const data = await queryClient.fetchQuery({
-    ...adminEventInfo.list({ page }),
-  });
+  const data = await queryClient.fetchQuery({ ...adminEventInfo.list({ page }) });
 
-  return { data, prefetchState: dehydrate(queryClient) };
+  return {data, prefetchState: dehydrate(queryClient)};
 };
 
 export const prefetchAdminEventInfoDetail = (id: string) => {

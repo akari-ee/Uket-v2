@@ -1,10 +1,5 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import {
-  dehydrate,
-  useQueries,
-  useQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { dehydrate, useSuspenseQuery } from "@tanstack/react-query";
 
 import {
   differenceInDays,
@@ -138,17 +133,6 @@ export const uketEvent = createQueryKeys("uket-event", {
       return data;
     },
   }),
-  image: (id: string | number | undefined) => ({
-    queryKey: ["event-thumbnail-image", id],
-    queryFn: async () => {
-      const response = await fetcher.get(`/image/${id}`, {
-        mode: "TOAST_UI",
-        responseType: "blob",
-      });
-
-      return response.data;
-    },
-  }),
 });
 
 /**
@@ -212,43 +196,13 @@ export const useQueryUketEventDetail = (id: UketEventItem["eventId"]) => {
   });
 };
 
-export const useQueryUketEventImage = (id: string | number | undefined) => {
-  return useQuery({
-    ...uketEvent.image(id),
-    enabled: !!id,
-  });
-};
-
-export const useQueryUketEventImageList = (idList: string[] | number[]) => {
-  return useQueries({
-    queries: idList.map(id => {
-      return {
-        ...uketEvent.image(id),
-        enabled: !!id,
-      };
-    }),
-    combine: results => {
-      return {
-        data: results.map(result => result.data),
-        pending: results.some(result => result.isPending),
-      };
-    },
-  });
-};
-
-export const prefetchUketEventList = async ({
-  type,
-}: UketEventListRequestParams) => {
+export const prefetchUketEventList = ({ type }: UketEventListRequestParams) => {
   const queryClient = getQueryClient();
-  try {
-    await queryClient.fetchQuery({
-      ...uketEvent.list({ type }),
-    });
+  queryClient.prefetchQuery({
+    ...uketEvent.list({ type }),
+  });
 
-    return { state: dehydrate(queryClient), error: null };
-  } catch (error) {
-    return { state: dehydrate(queryClient), error };
-  }
+  return dehydrate(queryClient);
 };
 
 export const prefetchUketEventDetail = async (id: UketEventItem["eventId"]) => {

@@ -57,19 +57,16 @@ export default function SideNav() {
           <NavLink key={href} href={href} title={title} />
         ))}
       </div>
-      <div className="py-4 grow">
-        {isSuperAdmin && (
-          <>
-            <div className="flex flex-col gap-8">
-              <hr />
-              {SUPER_ADMIN_NAV_LINK_LIST.map(({ href, title }) => (
-                <NavLink key={href} href={href} title={title} />
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-
+      {isSuperAdmin && (
+        <>
+          <hr />
+          <div className="py-4 flex flex-col gap-8 grow">
+            {SUPER_ADMIN_NAV_LINK_LIST.map(({ href, title }) => (
+              <NavLink key={href} href={href} title={title} />
+            ))}
+          </div>
+        </>
+      )}
       <hr />
       <HelperMenu />
     </aside>

@@ -32,7 +32,6 @@ export default function PosterImageField({
     onSetValue("uketEventImageId.file", file);
     onSetValue("uketEventImageId.previewImage", previewUrl);
   };
-  const previewImageSrc = onGetValue(`uketEventImageId.previewImage`);
 
   return (
     <FormField
@@ -59,15 +58,13 @@ export default function PosterImageField({
               {field.value ? (
                 <div className="w-full h-full flex items-center justify-between text-sm">
                   <div className="relative h-full w-full basis-1/2 rounded-s-lg overflow-hidden">
-                    {previewImageSrc && (
-                      <Image
-                        src={previewImageSrc}
-                        alt="Poster"
-                        width={100}
-                        height={100}
-                        className="w-full h-full aspect-square object-cover"
-                      />
-                    )}
+                    <Image
+                      src={onGetValue(`uketEventImageId.previewImage`)}
+                      alt="Poster"
+                      width={100}
+                      height={100}
+                      className="w-full h-full aspect-square object-cover"
+                    />
                   </div>
                   <div className="rounded-e-lg text-center items-center justify-center border border-formInput bg-white h-full basis-1/2 flex flex-col text-black gap-2">
                     <div>{field.value?.name}</div>

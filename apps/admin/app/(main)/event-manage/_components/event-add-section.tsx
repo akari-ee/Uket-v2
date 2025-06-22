@@ -15,7 +15,6 @@ import {
   PaymentSchema,
   useAddEventForm,
 } from "../../../../hooks/use-add-event-form";
-import { useInitStep } from "../../../../hooks/use-init-step";
 
 interface EventAddSectionProps {
   eventId?: string;
@@ -44,20 +43,10 @@ const StepPaymentInfo = dynamic(() => import("./step/step-payment-info"), {
 
 export default function EventAddSection({ eventId }: EventAddSectionProps) {
   const { data } = useQueryAdminEventInfoDetail(eventId);
-
   const { form, onSubmit } = useAddEventForm({
     initialData: data?.data,
     eventId,
   });
-
-  useInitStep({
-    eventImageId: data?.data?.uketEventImageId.id,
-    thumbnailImageId: data?.data?.thumbnailImageId.id,
-    bannerList: data?.data?.banners?.map(banner => banner.id) || [],
-    onSetValue: form.setValue,
-    initialBannerList: data?.data?.banners || [],
-  });
-
   const searchParams = useSearchParams();
 
   const funnel = useFunnel({
