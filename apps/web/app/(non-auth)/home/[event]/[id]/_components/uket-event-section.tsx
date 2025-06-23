@@ -8,15 +8,11 @@ import {
   TabsTrigger,
 } from "@ui/components/ui/tabs";
 import { cn } from "@ui/lib/utils";
-import {
-  useQueryUketEventDetail,
-  useQueryUketEventImage,
-  useQueryUketEventImageList,
-} from "@uket/api/queries/uket-event";
+import { useQueryUketEventDetail } from "@uket/api/queries/uket-event";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import AuthRequiredModalButton from "../../../../../../components/auth-requried-modal-button";
 import { handleClipboard } from "../../../../../../utils/clipboard";
 import CarouselT from "./carousel/Carousel";
@@ -52,21 +48,6 @@ export default function UketEventSection({
   eventName,
 }: UketEventSectionProps) {
   const { data } = useQueryUketEventDetail(eventId);
-  const bannerImageList = useQueryUketEventImageList(
-    data.banners.map(item => item.imageId),
-  );
-  const slides = useMemo(
-    () =>
-      bannerImageList.data && Array.isArray(bannerImageList.data)
-        ? bannerImageList.data.map((blob, idx) => ({
-            image: blob,
-            link: data.banners[idx]?.link,
-          }))
-        : [],
-    [bannerImageList.data, data.banners],
-  );
-  const { data: detailImage } = useQueryUketEventImage(data.detailImageId);
-
   const router = useRouter();
   const [tab, setTab] = useState<"행사정보" | "장소" | "환불규정">("행사정보");
 
@@ -122,19 +103,15 @@ export default function UketEventSection({
                 </div>
                 <div className="space-y-3">
                   <div className="h-[600px] my-3">
-                    {detailImage ? (
-                      <Image
-                        src={URL.createObjectURL(detailImage)}
-                        alt={eventName}
-                        width={100}
-                        height={100}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-[#e7e7e7]"></div>
-                    )}
+                    <Image
+                      src={"/default-event-image.png"}
+                      alt={eventName}
+                      width={100}
+                      height={100}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <CarouselT slides={slides} />
+                  <CarouselT slides={data.banners} />
                 </div>
                 <div className="space-y-2">
                   <h2 className="font-medium">주의사항</h2>

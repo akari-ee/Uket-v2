@@ -25,7 +25,7 @@ export default async function Layout({
             <SideNav />
           )}
         </header>
-        <main className="grow bg-[#F2F2F2] overflow-y-auto">
+        <main className="grow bg-[#F2F2F2]">
           {isMobileDevice && <GreetingHeader isMobileDevice />}
           {children}
         </main>

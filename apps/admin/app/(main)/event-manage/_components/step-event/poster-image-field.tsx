@@ -20,21 +20,18 @@ interface PosterImageFieldProps {
   control: Control<FieldValues, any>;
   onSetValue: UseFormSetValue<FieldValues>;
   onGetValue: UseFormGetValues<FieldValues>;
-  labelTitle: string;
 }
 
 export default function PosterImageField({
   control,
   onSetValue,
   onGetValue,
-  labelTitle,
 }: PosterImageFieldProps) {
   const handleFileChange = (file: File) => {
     const previewUrl = URL.createObjectURL(file);
     onSetValue("uketEventImageId.file", file);
     onSetValue("uketEventImageId.previewImage", previewUrl);
   };
-  const previewImageSrc = onGetValue(`uketEventImageId.previewImage`);
 
   return (
     <FormField
@@ -47,7 +44,7 @@ export default function PosterImageField({
             className="text-[#8989A1] text-base font-normal flex flex-col gap-4"
           >
             <div className="flex items-center gap-1">
-              <span>{labelTitle}</span>
+              <span>공연 상세 이미지 {"(ex.포스터)"}</span>
               <StepTooltip
                 content={
                   <div className="flex flex-col">
@@ -61,18 +58,16 @@ export default function PosterImageField({
               {field.value ? (
                 <div className="w-full h-full flex items-center justify-between text-sm">
                   <div className="relative h-full w-full basis-1/2 rounded-s-lg overflow-hidden">
-                    {previewImageSrc && (
-                      <Image
-                        src={previewImageSrc}
-                        alt="Poster"
-                        width={100}
-                        height={100}
-                        className="w-full h-full aspect-square object-cover"
-                      />
-                    )}
+                    <Image
+                      src={onGetValue(`uketEventImageId.previewImage`)}
+                      alt="Poster"
+                      width={100}
+                      height={100}
+                      className="w-full h-full aspect-square object-cover"
+                    />
                   </div>
                   <div className="rounded-e-lg text-center items-center justify-center border border-formInput bg-white h-full basis-1/2 flex flex-col text-black gap-2">
-                    <div className="truncate w-24">{field.value?.name}</div>
+                    <div>{field.value?.name}</div>
                     <div className="text-error underline underline-offset-4 font-medium">
                       수정하기
                     </div>
