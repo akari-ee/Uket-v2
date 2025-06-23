@@ -5,6 +5,7 @@ import {
   GlobalDragHandle,
   HighlightExtension,
   HorizontalRule,
+  Placeholder,
   StarterKit,
   TaskItem,
   TaskList,
@@ -17,6 +18,12 @@ import { Markdown } from "tiptap-markdown";
 
 import { cn } from "@ui/lib/utils";
 
+const placeholder = Placeholder.configure({
+  placeholder: () => {
+    return "상세 정보를 입력해 주세요.";
+  },
+  includeChildren: true,
+});
 const tiptapLink = TiptapLink.configure({
   HTMLAttributes: {
     class: cn(
@@ -68,9 +75,7 @@ const starterKit = StarterKit.configure({
   gapcursor: false,
 });
 
-const characterCount = CharacterCount.configure({
-  limit: 1000,
-});
+const characterCount = CharacterCount.configure();
 
 const markdownExtension = Markdown.configure({
   html: true,
@@ -85,7 +90,7 @@ const markdownExtension = Markdown.configure({
 
 export const defaultExtensions = [
   starterKit,
-  // placeholder,
+  placeholder,
   tiptapLink,
   updatedImage,
   taskList,
