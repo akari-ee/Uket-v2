@@ -42,14 +42,20 @@ const FormSchema = z.object({
       if (!val) return true;
       const phoneRegex = /^010-\d{4}-\d{4}$/;
       return phoneRegex.test(val);
-    }, "전화번호를 정확하게 입력해 주세요. (예: 010-xxxx-xxxx)"),
+    }, "전화번호를 정확하게 입력해 주세요. (ex. 010-1234-5678)"),
   organization: z.string({ required_error: "소속을 선택해 주세요." }),
   authority: z.string({ required_error: "권한을 선택해 주세요." }),
 });
 
-export const useNewAdminForm = ({ page }: { page: number }) => {
+export const useNewAdminForm = ({
+  page,
+  onClose,
+}: {
+  page: number;
+  onClose: () => void;
+}) => {
   const { mutate } = useMutationAddAdmin(page);
-
+  
   const form = useForm<NewAdminFormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -59,10 +65,19 @@ export const useNewAdminForm = ({ page }: { page: number }) => {
       organization: undefined,
       authority: undefined,
     },
+    mode: "onChange",
   });
 
   function onSubmit(data: NewAdminFormSchemaType) {
-    mutate({ ...data }, {});
+    mutate(
+      { ...data },
+      {
+        onSuccess: () => {
+          onClose();
+          form.reset();
+        },
+      },
+    );
   }
 
   return { form, onSubmit };
