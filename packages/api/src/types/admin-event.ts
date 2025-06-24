@@ -98,7 +98,6 @@ export interface AdminTicketDetail {
     depositorName: string;
     depositUrl: string;
   };
-  buyTicketLimit: number;
 }
 export interface AdminTicketInfoResponse extends PaginationMeta {
   content: Content[];
