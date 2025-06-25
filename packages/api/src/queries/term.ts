@@ -1,27 +1,15 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { getQueryClient } from "../get-query-client";
 import { fetcher } from "../instance";
-import { TermListResponse, TermMarketing } from "../types/term";
+import { TermListResponse } from "../types/term";
 
 export const term = createQueryKeys("term", {
   list: () => ({
     queryKey: ["term-list"],
     queryFn: async () => {
-      const { data } = await fetcher.get<TermListResponse>(
-        "/terms/check-required",
-      );
-
-      return data.items;
-    },
-  }),
-  marketing: () => ({
-    queryKey: ["term-marketing"],
-    queryFn: async () => {
-      const { data } = await fetcher.get<TermMarketing>(
-        "/terms/optional-answer",
-      );
+      const { data } = await fetcher.get<TermListResponse>("/terms/check-required");
 
       return data.items;
     },
@@ -34,10 +22,6 @@ export const term = createQueryKeys("term", {
  */
 export const useQueryTermList = () => {
   return useSuspenseQuery(term.list());
-};
-
-export const useQueryMarketingTerm = () => {
-  return useQuery({ ...term.marketing(), select: data => data[0] });
 };
 
 export const prefetchTermList = () => {

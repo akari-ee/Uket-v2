@@ -8,9 +8,7 @@ const AUTH_REQUIRED_PATH = [
   "/terms/check-required",
   "/terms/agreement",
   "/survey",
-  "/terms/optional-answer",
 ];
-
 const DYNAMIC_AUTH_REQUIRED_PATH = [
   /\/events\/\d+\/shows/,
   /\/events\/shows\/\d+\/reservations/,
