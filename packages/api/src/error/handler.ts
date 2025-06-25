@@ -1,7 +1,7 @@
 import { toast } from "@uket/ui/components/ui/sonner";
 import CustomAxiosError from "./default";
 
-/** GET 이외 에러 핸들러 (mutation) */
+/** 성공 시 토스트 */
 export const TOAST_HANDLER: Record<
   string,
   {
@@ -37,7 +37,7 @@ export const TOAST_HANDLER: Record<
   },
 };
 
-/** GET 메소드 에러 핸들러 (query) */
+/** 실패 시 토스트 */
 export const onErrorHandler = (error: CustomAxiosError) => {
   if (error.isToast) {
     toast.error(`${error.errorContent?.title || "에러가 발생했어요"}`, {

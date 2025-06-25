@@ -6,7 +6,7 @@ import {
   FormItem,
   FormLabel,
 } from "@ui/components/ui/form";
-import { FieldValues, useFormContext, useWatch } from "react-hook-form";
+import { FieldValues, useFormContext } from "react-hook-form";
 import EventEditor from "../editor/event-editor";
 import BannerImageField from "../step-event/banner-image-field";
 import ContactField from "../step-event/contact-field";
@@ -29,10 +29,6 @@ interface StepEventInfoProps {
 export default function StepEventInfo({ onPrev, onNext }: StepEventInfoProps) {
   const { control, register, trigger, watch, setValue, getValues } =
     useFormContext();
-  const eventType = useWatch({
-    control,
-    name: "eventType",
-  });
   const allFieldValues = watch();
 
   const handleNext = async () => {
@@ -71,11 +67,11 @@ export default function StepEventInfo({ onPrev, onNext }: StepEventInfoProps) {
   };
 
   return (
-    <main className="flex w-full h-full flex-col gap-2">
+    <main className="flex w-full flex-col gap-2">
       <section className="flex w-full bg-white shadow-sm p-11 grow rounded-lg flex-col gap-6">
         <header>
           <h3 className="text-[#17171C] font-bold text-xl">
-            3. 행사 정보를 입력해 주세요.
+            3. 공연 정보를 입력해 주세요.
           </h3>
         </header>
         <section className="flex gap-12">
@@ -86,7 +82,7 @@ export default function StepEventInfo({ onPrev, onNext }: StepEventInfoProps) {
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
                   <FormLabel className="text-[#8989A1] text-base font-normal">
-                    {eventType === "축제" ? "축제 상세 정보" : "공연 상세 정보"}
+                    공연 상세 정보
                   </FormLabel>
                   <FormControl>
                     <EventEditor field={field} id={field.name} />
@@ -119,11 +115,6 @@ export default function StepEventInfo({ onPrev, onNext }: StepEventInfoProps) {
                 control={control}
                 onSetValue={setValue}
                 onGetValue={getValues}
-                labelTitle={
-                  eventType === "축제"
-                    ? "축제 썸네일 이미지"
-                    : "공연 썸네일 이미지"
-                }
               />
               <BannerImageField
                 control={control}
@@ -137,11 +128,6 @@ export default function StepEventInfo({ onPrev, onNext }: StepEventInfoProps) {
                 control={control}
                 onSetValue={setValue}
                 onGetValue={getValues}
-                labelTitle={
-                  eventType === "축제"
-                    ? "축제 상세 이미지 (ex.포스터)"
-                    : "공연 상세 이미지 (ex.포스터)"
-                }
               />
               <ContactField control={control} />
             </aside>
