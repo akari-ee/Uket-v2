@@ -1,8 +1,3 @@
-import * as LabelPrimitive from "@radix-ui/react-label";
-import { Slot } from "@radix-ui/react-slot";
-import { Label } from "@ui/components/ui/label";
-import { cn } from "@ui/lib/utils";
-import * as React from "react";
 import {
   Controller,
   ControllerProps,
@@ -11,6 +6,11 @@ import {
   FormProvider,
   useFormContext,
 } from "react-hook-form";
+import * as React from "react";
+import { cn } from "@ui/lib/utils";
+import { Label } from "@ui/components/ui/label";
+import { Slot } from "@radix-ui/react-slot";
+import * as LabelPrimitive from "@radix-ui/react-label";
 
 const Form = FormProvider;
 
@@ -85,19 +85,14 @@ FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> & {
-    isErrorBlack?: boolean;
-  }
->(({ className, isErrorBlack = false, ...props }, ref) => {
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+>(({ className, ...props }, ref) => {
   const { error, formItemId } = useFormField();
 
   return (
     <Label
       ref={ref}
-      className={cn(
-        error && !isErrorBlack && "text-red-500 dark:text-red-900",
-        className,
-      )}
+      className={cn(error && "text-red-500 dark:text-red-900", className)}
       htmlFor={formItemId}
       {...props}
     />
@@ -173,12 +168,12 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 export {
+  useFormField,
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
   FormItem,
   FormLabel,
+  FormControl,
+  FormDescription,
   FormMessage,
-  useFormField,
+  FormField,
 };

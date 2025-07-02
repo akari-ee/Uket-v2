@@ -42,6 +42,4 @@ export {
   UnderlineIcon,
   UploadIcon,
   XIcon,
-  ChevronUp,
-  ChevronDown,
 } from "lucide-react";

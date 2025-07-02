@@ -63,11 +63,6 @@ export const useMutationAddAdmin = (page: number) => {
         queryKey: adminUser.list({ page }).queryKey,
       });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: adminUser.organizations().queryKey,
-      });
-    },
   });
 
   return mutation;
