@@ -1,13 +1,10 @@
 "use client";
 
+import { KAKAO_OPEN_CHAT_ID, KAKAO_OPEN_CHAT_URL } from "@uket/api/constants/auth-url";
 import { Button } from "@ui/components/ui/button";
-import { cn } from "@ui/lib/utils";
-import {
-  KAKAO_OPEN_CHAT_ID,
-  KAKAO_OPEN_CHAT_URL,
-} from "@uket/api/constants/auth-url";
-import Link from "next/link";
 import LogoutModal from "./logout-modal";
+import { cn } from "@ui/lib/utils";
+import Link from "next/link";
 
 declare global {
   interface Window {
@@ -48,18 +45,19 @@ function LinkButton({
 }
 
 export default function HelperMenu() {
-  const moveToChat = () => {
-    if (window.Kakao) {
-      if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+
+    const moveToChat = () => {
+      if (window.Kakao) {
+        if (!window.Kakao.isInitialized()) {
+          window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY);
+        }
       }
-    }
-
-    window.Kakao.Channel.chat({
-      channelPublicId: KAKAO_OPEN_CHAT_ID,
-    });
-  };
-
+  
+      window.Kakao.Channel.chat({
+        channelPublicId: KAKAO_OPEN_CHAT_ID,
+      });
+    };
+    
   return (
     <div>
       <LinkButton content="카카오톡 채널" link={KAKAO_OPEN_CHAT_URL} />
@@ -72,9 +70,7 @@ export default function HelperMenu() {
         1:1 상담
       </Button>
       <hr className="mx-auto my-1 w-3 border-[1px] rounded-md" />
-      <div className="flex justify-center">
-        <LogoutModal />
-      </div>
+      <LogoutModal />
     </div>
   );
 }

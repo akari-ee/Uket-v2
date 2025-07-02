@@ -1,35 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { cn } from "@ui/lib/utils";
-import { fetcherAdmin } from "@uket/api/admin-instance";
 import { checkUserAgent } from "../../../utils/check-user-agent";
 import SignupAuthSection from "../_components/signup-auth-section";
-import ExpiredContent from "./_components/expired-content";
 
-async function isTokenExpired(token: string | undefined) {
-  if (!token) return true;
-
-  try {
-    const { data } = await fetcherAdmin.get<{ isExpired: boolean }>(
-      `/users/register-expired?token=${token}`,
-    );
-
-    return data.isExpired;
-  } catch (err) {
-    return true;  
-  }
-}
-
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | undefined }>;
-}) {
+export default async function Page() {
   const isMobileDevice = await checkUserAgent();
-  const token = (await searchParams).token;
-
-  const isExpired = await isTokenExpired(token);
-  
-  if (isExpired) return <ExpiredContent />;
 
   return (
     <section

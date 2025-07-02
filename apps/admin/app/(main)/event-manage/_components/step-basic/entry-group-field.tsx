@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@ui/components/ui/button";
 import { DateInput, TimeField } from "@ui/components/ui/datefield-rac";
@@ -28,7 +26,7 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
     control,
   });
 
-  const [checked, setChecked] = useState<boolean>(fields.length !== 0);
+  const [checked, setChecked] = useState<boolean>(false);
 
   const totalTicketCount = useWatch({
     control,
@@ -53,10 +51,8 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
 
     append({
       ticketCount: undefined,
-      entryStartTime: {
-        hour: 0,
-        minute: 0,
-      },
+      entryStartTime: undefined,
+      entryEndTime: undefined,
     });
   };
 
@@ -65,10 +61,8 @@ export default function EntryGroupField({ control }: EntryGroupFieldProps) {
     else
       append({
         ticketCount: undefined,
-        entryStartTime: {
-          hour: 0,
-          minute: 0,
-        },
+        entryStartTime: undefined,
+        entryEndTime: undefined,
       });
 
     setChecked(checked => !checked);

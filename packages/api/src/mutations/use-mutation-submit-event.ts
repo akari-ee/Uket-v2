@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { format, formatTime } from "@uket/util/time";
+import { format } from "@uket/util/time";
 import { fetcherAdmin } from "../admin-instance";
 import { getQueryClient } from "../get-query-client";
 import { adminEventInfo } from "../queries/admin-event-info";
@@ -116,28 +116,21 @@ export const useMutationSubmitEvent = (
         };
       });
       const ticketingDate = {
-        ticketingStartDateTime:
-          params.ticketingDate.ticketingStartDateTime.toISOString(),
-        ticketingEndDateTime:
+        ticketingStartDateTime: format(
+          params.ticketingDate.ticketingStartDateTime,
+          "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        ),
+        ticketingEndDateTime: format(
           params.ticketingDate.ticketingEndDateTime.toISOString(),
+          "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        ),
       };
-      const entryGroup =
-        params.entryGroup.length === 0
-          ? params.eventRound.map(round => {
-              return {
-                ticketCount: params.totalTicketCount,
-                entryStartTime: round.startTime,
-              };
-            })
-          : params.entryGroup.map(entry => {
-              return {
-                ticketCount: entry.ticketCount,
-                entryStartTime: formatTime(
-                  entry.entryStartTime.hour,
-                  entry.entryStartTime.minute,
-                ),
-              };
-            });
+      const entryGroup = params.entryGroup.map(entry => {
+        return {
+          ticketCount: entry.ticketCount,
+          entryStartTime: `${entry.entryStartTime.hour}:${entry.entryStartTime.minute.toString().padStart(2, '0')}:00`,
+        };
+      });
       const imageIds = {
         uketEventImageId: params.uketEventImageId.id,
         thumbnailImageId: params.thumbnailImageId.id,
