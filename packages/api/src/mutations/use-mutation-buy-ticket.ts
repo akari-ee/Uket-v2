@@ -4,9 +4,8 @@ import { TicketResponse } from "../types/show";
 import { fetcher } from "../instance";
 
 type FormSchemaType = {
-  entryGroupId: number;
-  buyCount: number;
-  performerName: string;
+  universityId: number;
+  reservationId: number;
 };
 
 export const useMutationBuyTicket = () => {

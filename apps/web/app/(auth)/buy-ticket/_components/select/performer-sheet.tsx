@@ -1,12 +1,7 @@
 import { CircleX, Search } from "@ui/components/ui/icon";
 import { Input } from "@ui/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@uket/ui/components/ui/sheet";
-import { useMemo, useState } from "react";
+import { Sheet, SheetContent, SheetHeader } from "@uket/ui/components/ui/sheet";
+import { useState } from "react";
 
 interface PerformerSheetProps {
   isOpen: boolean;
@@ -23,15 +18,13 @@ export default function PerformerSheet({
 }: PerformerSheetProps) {
   const [inputValue, setInputValue] = useState("");
 
-  const filteredPerformers = useMemo(() => {
-    return [...performers]
-      .filter(name =>
-        inputValue.trim()
-          ? name.toLowerCase().includes(inputValue.toLowerCase())
-          : true,
-      )
-      .sort((a, b) => a.localeCompare(b));
-  }, [inputValue, performers]);
+  const filteredPerformers = [...performers]
+    .filter(name =>
+      inputValue.trim()
+        ? name.toLowerCase().includes(inputValue.toLowerCase())
+        : true,
+    )
+    .sort((a, b) => a.localeCompare(b));
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -40,7 +33,6 @@ export default function PerformerSheet({
         className="mx-auto max-w-[500px] rounded-t-2xl pt-5"
       >
         <SheetHeader className="w-full">
-          <SheetTitle hidden />
           <p className="px-8 text-start text-xs text-[#8989A1]">지인 이름</p>
           <div className="border-brand flex w-full items-center justify-between border-b-[1px] px-1 pb-1">
             <Search className="h-5 w-5 text-[#8989A1]" />

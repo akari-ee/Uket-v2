@@ -4,13 +4,13 @@ import PerformerSheet from "./performer-sheet";
 
 interface PerformerSelectFieldProps {
   performer: string;
-  onSelect: (name: string) => void;
+  setPerformer: (name: string) => void;
   performerList: string[];
 }
 
 export default function PerformerSelectField({
   performer,
-  onSelect,
+  setPerformer,
   performerList,
 }: PerformerSelectFieldProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -53,7 +53,7 @@ export default function PerformerSelectField({
           onClose={() => setIsSheetOpen(false)}
           performers={performerList}
           onSelectPerformer={name => {
-            onSelect(name);
+            setPerformer(name);
             setIsSheetOpen(false);
           }}
         />

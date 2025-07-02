@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
@@ -9,13 +8,9 @@ import { useFunnel } from "@use-funnel/browser";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { z } from "zod";
-import { useEventBookingForm } from "../../../hooks/use-event-booking-form";
+import { useBuyTicketForm } from "../../../hooks/use-buy-ticket-form";
 
 const StepSelect = dynamic(() => import("./_components/step/step-select"), {
-  ssr: false,
-});
-
-const StepTest = dynamic(() => import("./_components/step/step-test"), {
   ssr: false,
 });
 
@@ -35,12 +30,10 @@ const SelectSchema = z
   })
   .partial();
 
-const TestSchema = z.object({});
-
 const CompleteSchema = z.object({});
 
 export default function BuyTicketSection() {
-  const { form, onSubmit } = useEventBookingForm();
+  const { form } = useBuyTicketForm();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -58,18 +51,15 @@ export default function BuyTicketSection() {
   const funnel = useFunnel({
     id: "buy-ticket",
     steps: {
-      // Select: {
-      //   parse: SelectSchema.parse,
-      // },
-      Test: {
-        parse: TestSchema.parse,
+      Select: {
+        parse: SelectSchema.parse,
       },
       Complete: {
         parse: CompleteSchema.parse,
       },
     },
     initial: {
-      step: "Test",
+      step: "Select",
       context: {},
     },
   });
@@ -80,25 +70,26 @@ export default function BuyTicketSection() {
     const buyTicketStep = params.get("buy-ticket.step");
 
     if (buyTicketStep) {
-      funnel.history.replace("Test");
+      funnel.history.replace("Select");
     }
   }, []);
 
   return (
     <Form {...form}>
       <funnel.Render
-        Test={({ history }) => (
-          <StepTest
+        Select={({ history }) => (
+          <StepSelect
             eventName={eventName!}
             eventId={eventId!}
-            form={form}
-            onSubmit={onSubmit}
             onPrev={() => {
               router.replace(routeUrl);
             }}
-            onNext={() => {
-              history.push("Complete");
-            }}
+            onNext={(showId: string, showDate: string) =>
+              history.push("Complete", {
+                showId: showId,
+                showDate: showDate,
+              })
+            }
           />
         )}
         Complete={() => <StepComplete routeUrl={routeUrl} deposit={testData} />}
