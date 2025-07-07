@@ -21,9 +21,6 @@ interface TicketProps {
 }
 
 export default function Ticket({ ticket }: TicketProps) {
-  // const isTicketCancelAvailable =
-  //   ticket.ticketStatus === "입금 확인중" ||
-  //   ticket.ticketStatus === "예매 완료";
   const { data: backgroundImage } = useQueryUketEventImage(
     ticket.backgroundImageId,
   );
@@ -37,7 +34,7 @@ export default function Ticket({ ticket }: TicketProps) {
                 <AspectRatio ratio={16 / 9}>
                   {backgroundImage ? (
                     <Image
-                      src={backgroundImage}
+                      src={URL.createObjectURL(backgroundImage)}
                       alt={ticket.eventName}
                       width={100}
                       height={100}
@@ -73,7 +70,7 @@ export default function Ticket({ ticket }: TicketProps) {
                   />
                   <GridItem
                     title={"입장 시간"}
-                    content={`${ticket.enterStartTime} ~ ${ticket.enterEndTime}`}
+                    content={`${ticket.enterStartTime}`}
                   />
                 </section>
               </main>
@@ -87,7 +84,9 @@ export default function Ticket({ ticket }: TicketProps) {
                     isTicketNo
                   />
                 </div>
-                {ticket.isCancelable ? (
+                {ticket.ticketStatus !== "입장 완료" &&
+                ticket.ticketStatus !== "환불 요청" &&
+                ticket.ticketStatus !== "예매 취소" ? (
                   <ConfirmModal
                     ticketId={ticket.ticketId}
                     ticketStatus={ticket.ticketStatus}
