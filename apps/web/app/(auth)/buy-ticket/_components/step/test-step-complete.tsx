@@ -21,8 +21,6 @@ interface StepCompleteProps {
   depositUrl: string;
   routeUrl: string;
   organization: string | null;
-  accountNumber: string;
-  depositorName: string;
 }
 
 export default function StepComplete({
@@ -31,8 +29,6 @@ export default function StepComplete({
   bankCode,
   depositUrl,
   organization,
-  accountNumber,
-  depositorName
 }: StepCompleteProps) {
   const router = useRouter();
 
@@ -57,12 +53,12 @@ export default function StepComplete({
             </h6>
             <div className="flex items-center justify-center gap-2">
               <div className="text-base font-normal text-[#8989A1]">
-                <span>{bankCode + " " + accountNumber} </span>
-                <span>{depositorName}</span>
+                <span>{bankCode + " " + depositUrl} </span>
+                <span>{organization}</span>
               </div>
               <p
                 className="text-brand decoration-brand cursor-pointer font-bold underline decoration-solid decoration-1 underline-offset-2"
-                onClick={() => handleClipboard(accountNumber)}
+                onClick={() => handleClipboard(depositUrl)}
               >
                 복사
               </p>

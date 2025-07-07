@@ -8,23 +8,20 @@ export type TicketStatus =
 
 export type TicketItem = {
   userName: string;
-  userId: number;
+  showDate: string;
+  enterStartTime: string;
+  enterEndTime: string;
+  showLocation: string;
+  universityName: string;
   ticketStatus: TicketStatus;
   ticketNo: string;
-  ticketId: number;
-  showDate: string;
-  reserveAt: string;
-  organizationName: string;
-  location: string;
-  isCancelable: boolean;
+  userType: string;
+  showName: string;
+  eventId: number;
   eventName: string;
-  uketEventId: number;
-  entryGroupId: number;
-  enterStartTime: string;
-  enterStartDateTime: string;
-  enterEndTime: string;
+  ticketId: number;
   createdAt: string;
-  backgroundImageId: number;
+  backgroundImageUrl: string;
 };
 
 export type QRCodeType = string;
@@ -41,14 +38,10 @@ export type CancelTicketResponse = {
 };
 
 export type DepositResponse = {
-  organizationId: number;
-  depositLink: string;
+  accountNumber: string;
+  accountOwner: string;
+  depositUrl: string;
   ticketPrice: number;
-  account: {
-    bankCode: string;
-    accountNumber: string;
-    depositorName: string;
-  };
 };
 
 export type depositType = {

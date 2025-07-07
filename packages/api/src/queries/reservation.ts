@@ -58,13 +58,13 @@ export const reservation = createQueryKeys("reservation", {
     },
   }),
   account: (
-    // ticketId: TicketItem["ticketId"],
-    eventId: TicketItem["uketEventId"],
+    ticketId: TicketItem["ticketId"],
+    eventId: TicketItem["eventId"],
   ) => ({
-    queryKey: ["deposit", eventId],
+    queryKey: ["deposit", eventId, ticketId],
     queryFn: async () => {
       const { data } = await fetcher.get<DepositResponse>(
-        `/api/payments/uket-events/${eventId}`
+        `/events/${eventId}/account`,
       );
 
       return data;
@@ -201,11 +201,12 @@ export const useQueryReservationList = (
 };
 
 export const useQueryDepositurl = (
-  eventId: TicketItem["uketEventId"],
+  ticketId: TicketItem["ticketId"],
+  eventId: TicketItem["eventId"],
   ticketStatus: TicketItem["ticketStatus"] = "입금 확인중",
 ) => {
   return useQuery({
-    ...reservation.account(eventId),
+    ...reservation.account(ticketId, eventId),
     enabled: !!eventId && ticketStatus === "입금 확인중",
   });
 };
@@ -242,11 +243,11 @@ export const prefetchReservationList = (
 
 export const prefetchDepositUrl = (
   ticketId: TicketItem["ticketId"],
-  eventId: TicketItem["uketEventId"],
+  eventId: TicketItem["eventId"],
 ) => {
   const queryClient = getQueryClient();
   queryClient.prefetchQuery({
-    ...reservation.account(eventId),
+    ...reservation.account(ticketId, eventId),
   });
 
   return dehydrate(queryClient);

@@ -2,17 +2,19 @@
 import { Button } from "@ui/components/ui/button";
 import { useQueryDepositurl } from "@uket/api/queries/reservation";
 import { TicketItem } from "@uket/api/types/ticket";
+import Link from "next/link";
 import { handleClipboard } from "../../../../utils/clipboard";
 
 interface DepositProps
-  extends Pick<TicketItem, "uketEventId" | "ticketStatus"> {}
+  extends Pick<TicketItem, "ticketId" | "eventId" | "ticketStatus"> {}
 
 export default function Deposit({
-  uketEventId,
+  ticketId,
+  eventId,
   ticketStatus: isDepositActive,
 }: DepositProps) {
-  const { data } = useQueryDepositurl(uketEventId, isDepositActive);
-  
+  const { data } = useQueryDepositurl(ticketId, eventId, isDepositActive);
+
   return (
     <>
       {isDepositActive && data && (
@@ -30,18 +32,27 @@ export default function Deposit({
             </h3>
           </header>
           <div className="space-y-1">
+            <Button
+              asChild
+              className="bg-brand hover:bg-brandHover rounded-lg text-xs"
+            >
+              <Link
+                href={data.depositUrl}
+                target="_blank"
+                className="font-bold"
+              >
+                카카오로 입금하기
+              </Link>
+            </Button>
             <footer className="flex items-center justify-center gap-1 text-sm">
-              <div className="space-x-1">
-                <span>{data.account.bankCode}</span>
-                <span>{data.account.accountNumber} </span>
-                <span>{data.account.depositorName}</span>
+              <div>
+                <span>{data.accountNumber} </span>
+                <span>{data.accountOwner}</span>
               </div>
               <Button
                 variant="link"
-                className="text-brand cursor-pointer px-1 font-bold underline"
-                onClick={() =>
-                  handleClipboard(data?.account.accountNumber ?? "")
-                }
+                className="text-brand cursor-pointer px-1 font-bold"
+                onClick={() => handleClipboard(data?.accountNumber ?? "")}
               >
                 복사
               </Button>
