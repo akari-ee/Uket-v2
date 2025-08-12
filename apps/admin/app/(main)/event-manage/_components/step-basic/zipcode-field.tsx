@@ -45,11 +45,7 @@ export default function ZipcodeField({
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    onSetValue("location.base", fullAddress, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
+    onSetValue("location.base", fullAddress);
   };
 
   const handleClick = () => {
